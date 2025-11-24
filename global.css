@@ -1,0 +1,19 @@
+﻿/* global.css - base styles (keeps your original variables and base rules) */
+:root{--accent:#0b74ff;--bg:#f4f6f8;--card:#fff}
+*{box-sizing:border-box}
+body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);margin:0;color:#222}
+.container{max-width:1000px;margin:0 auto;padding:20px}
+.site-header{background:#fff;padding:12px 20px;border-bottom:1px solid #eee}
+.logo{color:var(--accent)}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:20px}
+.card{background:var(--card);padding:14px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,0.04)}
+.btn.primary{background:var(--accent);color:#fff}
+.input{width:100%;padding:8px;border:1px solid #ddd;border-radius:6px}
+
+/* additional global improvements */
+a{color:var(--accent);text-decoration:none}
+h1,h2,h3{color:#1b3550}
+.container{padding-left:24px;padding-right:24px}
+img{max-width:100%;display:block}
+.row{display:flex;flex-wrap:wrap;gap:16px}
+.small{font-size:0.9rem;color:#666}
