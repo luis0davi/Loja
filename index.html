@@ -1,0 +1,77 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Loja Completa — Visual Profissional</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="stylesheet" href="/css/products.css">
+  <link rel="stylesheet" href="/css/footer.css">
+  <link rel="stylesheet" href="/css/cart.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="logo">🛒 <span class="brand">Loja Completa</span></div>
+      <nav class="nav-menu">
+        <a href="/">Início</a>
+        <a href="/admin.html">Admin</a>
+        <a href="/checkout.html" class="cart-link">Carrinho <span id="cart-count" class="cart-badge">0</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-left">
+        <h1>Produtos digitais prontos para uso</h1>
+        <p>Entrega automática após pagamento. Integração com Mercado Pago — rápido e seguro.</p>
+        <a class="btn cta" href="#products">Ver produtos</a>
+      </div>
+      <div class="hero-right">
+        <img src="/img/hero1.png" alt="Banner" />
+      </div>
+    </div>
+  </section>
+
+  <main class="container">
+    <h2 class="section-title">Nossos Produtos</h2>
+    <section id="products" class="products-grid"></section>
+    <div class="pagination" aria-label="Paginação"></div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-box">
+        <h4>Suporte</h4>
+        <p>Envie um e-mail para suporte@seudominio.com</p>
+      </div>
+      <div class="footer-center">
+        <img src="/img/hero2.png" alt="Logo" style="max-width:160px;margin-bottom:12px"/>
+        <p>Pagamentos via Mercado Pago</p>
+      </div>
+      <div class="footer-box">
+        <h4>Políticas</h4>
+        <p>Termos, Privacidade e Reembolsos</p>
+      </div>
+    </div>
+    <div class="footer-bottom">© YEAR Loja Completa — Todos os direitos reservados</div>
+  </footer>
+
+  <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
+    <h3>Seu Carrinho</h3>
+    <div id="cart-items" style="overflow:auto;max-height:60vh;margin-top:8px"></div>
+    <div class="cart-actions">
+      <button id="checkout-open" class="btn checkout-primary">Finalizar Compra</button>
+      <button id="cart-close" class="btn checkout-secondary">Fechar</button>
+    </div>
+  </div>
+
+  <script>document.querySelector('.footer-bottom').textContent = '© ' + new Date().getFullYear() + ' Loja Completa — Todos os direitos reservados';</script>
+  <script src="/js/storefront.js"></script>
+  <script src="/js/cart.js"></script>
+</body>
+</html>

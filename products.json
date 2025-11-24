@@ -1,0 +1,4 @@
+﻿[
+  {"id":"p-ebook","title":"E-book Marketing 101","description":"Guia prático","price_cents":1500,"filename":"ebook-example.pdf","image":"/img/hero3.png"},
+  {"id":"p-planilha","title":"Planilha Controle","description":"Planilha Excel","price_cents":2900,"filename":"planilha-example.xlsx","image":"/img/hero4.png"}
+]

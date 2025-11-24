@@ -1,0 +1,23 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Checkout — Loja Completa</title>
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/cart.css">
+</head>
+<body>
+  <header class="site-header"><div class="container header-inner"><div class="logo">🛒 Loja Completa</div><nav class="nav-menu"><a href="/">Início</a><a href="/admin.html">Admin</a></nav></div></header>
+  <main class="container">
+    <h2>Checkout</h2>
+    <div id="cart-contents"></div>
+    <div id="cart-total" class="card" style="margin-top:12px;padding:16px"></div>
+    <div style="margin-top:12px">
+      <label>Seu e-mail (receber link):</label>
+      <input id="buyer-email" class="input" placeholder="seu@email.com">
+    </div>
+    <div style="margin-top:14px">
+      <button id="pay-mercadopago" class="btn">Pagar com Mercado Pago</button>
+    </div>
+  </main>
+  <script src="/js/checkout-ui.js"></script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin — Loja</title>
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/products.css">
+</head>
+<body>
+  <main class="container">
+    <h1>Painel Admin (local)</h1>
+    <form id="product-form">
+      <label>Título</label><input name="title" class="input" required>
+      <label>Descrição</label><input name="description" class="input">
+      <label>Preço (R$)</label><input name="price" class="input" required>
+      <label>Imagem (URL)</label><input name="image" class="input" placeholder="/img/hero3.png">
+      <button class="btn" type="submit">Salvar Produto</button>
+    </form>
+    <h3>Produtos</h3>
+    <div id="admin-products" class="products-grid"></div>
+  </main>
+  <script src="/js/admin-local.js"></script>
+</body>
+</html>
