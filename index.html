@@ -1,42 +1,333 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Minha Loja</title>
-<style>
-  body { font-family: Arial; margin: 0; background: #f7f7f7; }
-  header { background: #111; color: #fff; padding: 20px; text-align: center; }
-  .produtos { display: grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap: 20px; padding: 20px; }
-  .card { background: #fff; border-radius: 10px; padding: 10px; box-shadow: 0 0 10px #0001; }
-  .card img { width: 100%; border-radius: 10px; }
-  .card h3 { margin: 10px 0; }
-  .btn { display: block; background: #111; color: #fff; padding: 10px; text-align: center; border-radius: 5px; text-decoration: none; }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tia Ceci Monte — Loja Educativa</title>
+  <meta name="description" content="Recursos pedagógicos digitais e impressos — Tia Ceci Monte" />
+  <style>
+    :root{
+      --bg:#fff9f2; --card:#fff; --accent:#f07b8a; --accent-2:#3b82f6; --muted:#6b7280; --glass: rgba(255,255,255,0.6);
+      --radius:14px; --shadow: 0 6px 18px rgba(19,24,36,0.08);
+      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,var(--bg),#fff);color:#111}
+    header{background:var(--accent);color:white;padding:18px 20px;display:flex;align-items:center;gap:18px;justify-content:space-between}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:56px;height:56px;border-radius:12px;background:white;display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:700;box-shadow:var(--shadow)}
+    .brand h1{font-size:18px;margin:0}
+    nav{display:flex;gap:12px;align-items:center}
+    nav a{color:white;text-decoration:none;padding:8px 10px;border-radius:10px;font-weight:600;opacity:.95}
+    nav a.button{background:rgba(255,255,255,0.12)}
+
+    .container{max-width:1100px;margin:20px auto;padding:0 18px}
+    .hero{display:grid;grid-template-columns:1fr 360px;gap:20px;align-items:center;margin-bottom:22px}
+    .hero .intro{background:linear-gradient(180deg,#fff 0%, #fff0 45%);padding:28px;border-radius:16px;box-shadow:var(--shadow)}
+    .hero h2{margin:0 0 8px;font-size:28px}
+    .hero p{margin:0;color:var(--muted)}
+    .hero .cta{margin-top:14px}
+    .btn{display:inline-block;padding:10px 14px;border-radius:12px;font-weight:700;text-decoration:none}
+    .btn-primary{background:var(--accent);color:white}
+    .btn-ghost{background:transparent;border:2px solid var(--accent);color:var(--accent)}
+
+    .categories{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 18px}
+    .cat{background:linear-gradient(180deg,rgba(255,255,255,0.6),rgba(255,255,255,0.3));padding:10px 12px;border-radius:12px;box-shadow:var(--shadow);font-weight:700}
+
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .card{background:var(--card);padding:12px;border-radius:12px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
+    .thumb{height:160px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:20px}
+    .meta{display:flex;justify-content:space-between;align-items:center}
+    .price{font-weight:800;color:var(--accent)}
+    .small{color:var(--muted);font-size:13px}
+
+    footer{margin-top:28px;padding:18px;background:#0f1724;color:white;border-top-left-radius:18px;border-top-right-radius:18px}
+    .foot-grid{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;gap:12px;align-items:center;padding:0 18px}
+
+    /* responsiveness */
+    @media (max-width:900px){
+      .hero{grid-template-columns:1fr}
+      .grid{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width:560px){
+      header{padding:12px}
+      .grid{grid-template-columns:1fr}
+      nav{display:none}
+    }
+
+    /* cart badge */
+    .cart{position:relative}
+    .badge{position:absolute;right:-8px;top:-8px;background:#111;color:white;border-radius:999px;padding:6px 8px;font-size:12px}
+
+    /* product modal */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.4)}
+    .modal .panel{background:white;padding:18px;border-radius:12px;max-width:760px;width:92%}
+
+    /* small helpers */
+    .muted{color:var(--muted)}
+  </style>
 </head>
 <body>
+  <header>
+    <div class="brand">
+      <div class="logo">TC</div>
+      <div>
+        <h1>Tia Ceci Monte</h1>
+        <div class="small">Recursos pedagógicos — Atividades & Kits</div>
+      </div>
+    </div>
 
-<header>
-  <h1>Minha Loja Virtual</h1>
-</header>
+    <nav>
+      <a href="#">Loja</a>
+      <a href="#">Gratuitos</a>
+      <a href="#">Kits</a>
+      <a href="#">Contato</a>
+      <a class="button" id="cart-btn" href="#">Carrinho <span class="badge" id="cart-count">0</span></a>
+    </nav>
+  </header>
 
-<div class="produtos">
+  <main class="container">
+    <section class="hero">
+      <div class="intro">
+        <h2>Atividades que encantam. Materiais que funcionam.</h2>
+        <p class="muted">Kits prontos para imprimir, jogos e planos de aula para alfabetização, ética, NR‑18 e muito mais — desenvolvidos para professores e famílias.</p>
+        <div class="cta">
+          <a class="btn btn-primary" href="#catalog">Ver produtos</a>
+          <a class="btn btn-ghost" href="#">Área membro</a>
+        </div>
 
-  <div class="card">
-    <img src="https://via.placeholder.com/300x200" alt="">
-    <h3>Produto 1</h3>
-    <p>R$ 25,00</p>
-    <a class="btn" href="produto1.html">Ver Produto</a>
+        <div class="categories" style="margin-top:16px">
+          <div class="cat">Alfabetização</div>
+          <div class="cat">Ética & Valores</div>
+          <div class="cat">NR‑18 (Segurança)</div>
+          <div class="cat">Gratuitos</div>
+        </div>
+        <p class="small">Dica: você pode baixar produtos digitais imediatamente após a compra.</p>
+      </div>
+
+      <aside style="background:var(--card);padding:14px;border-radius:12px;box-shadow:var(--shadow)">
+        <h3 style="margin-top:0">Promoção</h3>
+        <div style="font-weight:800;font-size:22px;color:var(--accent)">Kits 3x por R$18,00</div>
+        <p class="muted">Pacote temático para planejar uma semana inteira de atividades.</p>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <a class="btn btn-primary" href="#catalog">Comprar agora</a>
+          <a class="btn" href="#">Saber mais</a>
+        </div>
+      </aside>
+    </section>
+
+    <section id="catalog">
+      <h3 style="margin-bottom:10px">Produtos em destaque</h3>
+      <div class="grid">
+        <!-- Product 1 -->
+        <article class="card">
+          <div class="thumb">Kit Valores</div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-weight:800">Kit Valores — Atividades</div>
+              <div class="small">PDF pronto para imprimir (45 páginas)</div>
+            </div>
+            <div class="price">R$ 12,00</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn" onclick="openProduct(1)">Detalhes</button>
+            <button class="btn btn-primary" onclick="addToCart(1)">Comprar</button>
+          </div>
+        </article>
+
+        <!-- Product 2 -->
+        <article class="card">
+          <div class="thumb">Alfabetização</div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-weight:800">Alfabetiza Aventura</div>
+              <div class="small">Jogos e fichas para alfabetização</div>
+            </div>
+            <div class="price">R$ 20,00</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn" onclick="openProduct(2)">Detalhes</button>
+            <button class="btn btn-primary" onclick="addToCart(2)">Comprar</button>
+          </div>
+        </article>
+
+        <!-- Product 3 -->
+        <article class="card">
+          <div class="thumb">NR‑18</div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-weight:800">NR‑18 — Apostila</div>
+              <div class="small">Resumo da norma para estudantes (PDF)</div>
+            </div>
+            <div class="price">R$ 8,00</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn" onclick="openProduct(3)">Detalhes</button>
+            <button class="btn btn-primary" onclick="addToCart(3)">Comprar</button>
+          </div>
+        </article>
+
+        <!-- Product 4 -->
+        <article class="card">
+          <div class="thumb">Gratuito</div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-weight:800">Cartões de Acolhimento</div>
+              <div class="small">Atividade grátis — baixe agora</div>
+            </div>
+            <div class="price">Grátis</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn" onclick="openProduct(4)">Detalhes</button>
+            <button class="btn btn-primary" onclick="addToCart(4)">Adicionar</button>
+          </div>
+        </article>
+
+        <!-- Product 5 -->
+        <article class="card">
+          <div class="thumb">Kit 3x</div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-weight:800">Pacote Semanal</div>
+              <div class="small">3 kits temáticos — economia</div>
+            </div>
+            <div class="price">R$ 18,00</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn" onclick="openProduct(5)">Detalhes</button>
+            <button class="btn btn-primary" onclick="addToCart(5)">Comprar</button>
+          </div>
+        </article>
+
+        <!-- Product 6 -->
+        <article class="card">
+          <div class="thumb">Oficina</div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-weight:800">Oficina — Recursos</div>
+              <div class="small">Modelos prontos para oficina</div>
+            </div>
+            <div class="price">R$ 10,00</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn" onclick="openProduct(6)">Detalhes</button>
+            <button class="btn btn-primary" onclick="addToCart(6)">Comprar</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section style="margin-top:18px">
+      <h3>Sobre a Tia Ceci</h3>
+      <p class="muted">Sou professora e desenvolvo materiais práticos para sala de aula. Aqui você encontra recursos prontos para imprimir, usar em rodas de conversa, oficinas e muito mais.</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="foot-grid">
+      <div>
+        <div style="font-weight:800">Tia Ceci Monte</div>
+        <div class="small">Contato: tiaceci@example.com • WhatsApp: (00) 90000‑0000</div>
+      </div>
+      <div style="text-align:right">
+        <div class="small">Siga nas redes</div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:6px">
+          <a href="#" class="small" style="color:white">Instagram</a>
+          <a href="#" class="small" style="color:white">WhatsApp</a>
+          <a href="#" class="small" style="color:white">YouTube</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal product detail -->
+  <div class="modal" id="modal">
+    <div class="panel" id="modal-panel">
+      <h3 id="modal-title">Produto</h3>
+      <p id="modal-desc" class="muted">Descrição</p>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <a id="buy-now" class="btn btn-primary" href="#">Comprar</a>
+        <a class="btn" href="#" onclick="closeModal()">Fechar</a>
+      </div>
+    </div>
   </div>
 
-  <div class="card">
-    <img src="https://via.placeholder.com/300x200" alt="">
-    <h3>Produto 2</h3>
-    <p>R$ 40,00</p>
-    <a class="btn" href="produto2.html">Ver Produto</a>
-  </div>
+  <script>
+    // Simple product store (mock)
+    const PRODUCTS = {
+      1: {id:1,title:'Kit Valores — Atividades',desc:'PDF com 45 páginas para trabalhar valores e convivência. Entrega digital após pagamento.',price:12,download:'kit-valores.pdf'},
+      2: {id:2,title:'Alfabetiza Aventura',desc:'Jogos e fichas para alfabetização. Páginas para recortar e jogar.',price:20,download:'alfabetiza-aventura.pdf'},
+      3: {id:3,title:'NR‑18 — Apostila',desc:'Resumo da NR‑18 em linguagem didática, fichas e exercícios.',price:8,download:'nr18-apostila.pdf'},
+      4: {id:4,title:'Cartões de Acolhimento',desc:'Arquivo gratuito — cartões para imprimir e usar em sala.',price:0,download:'cartoes-acolhimento.pdf'},
+      5: {id:5,title:'Pacote Semanal',desc:'3 kits temáticos por R$18 — economia e conteúdo pronto.',price:18,download:'pacote-semanal.zip'},
+      6: {id:6,title:'Oficina — Recursos',desc:'Modelos e materiais para oficina presencial.',price:10,download:'oficina-recursos.pdf'}
+    }
 
-</div>
+    // cart in memory
+    const CART = []
+    function addToCart(id){
+      const p = PRODUCTS[id]
+      CART.push(p)
+      document.getElementById('cart-count').textContent = CART.length
+      alert(p.title + ' adicionado ao carrinho')
+    }
 
+    function openProduct(id){
+      const p = PRODUCTS[id]
+      document.getElementById('modal-title').textContent = p.title
+      document.getElementById('modal-desc').textContent = p.desc + ' — Preço: R$ ' + p.price.toFixed(2)
+      document.getElementById('buy-now').textContent = p.price>0? 'Comprar (R$ '+p.price.toFixed(2)+')' : 'Baixar grátis'
+      document.getElementById('buy-now').href = '#'
+      document.getElementById('buy-now').onclick = function(e){ e.preventDefault(); checkout(p); }
+      document.getElementById('modal').style.display = 'flex'
+    }
+    function closeModal(){ document.getElementById('modal').style.display = 'none' }
+
+    function checkout(product){
+      // Mock checkout flow: if price==0 -> download; else -> simulate payment then download link
+      if(product.price === 0){
+        closeModal();
+        downloadFile(product.download)
+        return
+      }
+      // Simulate payment success
+      closeModal();
+      setTimeout(()=>{
+        alert('Pagamento simuladamente aprovado. Iniciando download...')
+        downloadFile(product.download)
+      },600)
+    }
+
+    function downloadFile(filename){
+      // This is a mock — in a real site you'd link to protected files or use WooCommerce downloads
+      const content = 'Este é um arquivo de exemplo para: ' + filename + '\n\nSubstitua com o seu PDF real.'
+      const blob = new Blob([content], {type:'text/plain'})
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = filename
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      URL.revokeObjectURL(url)
+    }
+
+    // cart button - show quick cart
+    document.getElementById('cart-btn').addEventListener('click', function(e){
+      e.preventDefault()
+      let s = 'Carrinho:\n'
+      if(CART.length===0) s += '\n( vazio )'
+      CART.forEach((it,i)=> s += `\n${i+1}. ${it.title} — R$ ${it.price.toFixed(2)}`)
+      s += '\n\n(A compra é simulada nesta versão. Use o botão Detalhes para pagamentos.)'
+      alert(s)
+    })
+
+    // Small enhancement: update cart count on load if items in localStorage
+    (function(){
+      try{ const stored = JSON.parse(localStorage.getItem('tc_cart')||'[]'); if(Array.isArray(stored)){ stored.forEach(id=>{ if(PRODUCTS[id]) CART.push(PRODUCTS[id]) }) document.getElementById('cart-count').textContent = CART.length }}catch(e){}
+      // persist on unload
+      window.addEventListener('beforeunload', ()=>{ try{ localStorage.setItem('tc_cart', JSON.stringify(CART.map(p=>p.id))) }catch(e){} })
+    })()
+  </script>
 </body>
 </html>
