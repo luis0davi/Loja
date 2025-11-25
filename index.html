@@ -303,5 +303,92 @@
     // small init
     document.addEventListener('DOMContentLoaded', ()=>{ updateCartLabel() })
   </script>
+<script>
+// --- SISTEMA DE CARRINHO COMPLETO ---
+let cart = [];
+
+function saveCart(){ localStorage.setItem('cart', JSON.stringify(cart)); }
+function loadCart(){ const data = localStorage.getItem('cart'); if(data) cart = JSON.parse(data); }
+loadCart();
+
+function renderCart(){
+  const box = document.getElementById('cart-box');
+  box.innerHTML = '';
+  if(cart.length === 0){ box.innerHTML = '<p>Seu carrinho está vazio.</p>'; return; }
+  cart.forEach((p,i)=>{
+    const div = document.createElement('div');
+    div.className = 'cart-item';
+    div.innerHTML = `
+      <img src="${p.img}" />
+      <div>
+        <h4>${p.name}</h4>
+        <p>R$ ${p.price.toFixed(2)}</p>
+        <div class="qty-control">
+          <button onclick="changeQty(${i},-1)">-</button>
+          <span>${p.qty}</span>
+          <button onclick="changeQty(${i},1)">+</button>
+        </div>
+      </div>
+      <button class="remove" onclick="removeItem(${i})">✖</button>
+    `;
+    box.appendChild(div);
+  });
+}
+
+function addToCart(name, price, img){
+  const found = cart.find(p=>p.name===name);
+  if(found){ found.qty++; }
+  else{ cart.push({name,price,img,qty:1}); }
+  saveCart();
+  renderCart();
+  openCart();
+}
+
+function changeQty(i,delta){
+  cart[i].qty += delta;
+  if(cart[i].qty<=0) cart.splice(i,1);
+  saveCart(); renderCart();
+}
+
+function removeItem(i){ cart.splice(i,1); saveCart(); renderCart(); }
+
+function openCart(){ document.getElementById('cart-panel').style.display='flex'; renderCart(); }
+function closeCart(){ document.getElementById('cart-panel').style.display='none'; }
+
+// --- CATEGORIAS ---
+function filterCategory(cat){
+  document.querySelectorAll('.product-card').forEach(card=>{
+    if(cat==='all' || card.dataset.cat===cat) card.style.display='block';
+    else card.style.display='none';
+  });
+}
+
+// --- ÁREA DE MEMBROS ---
+function registerUser(){
+  const email = document.getElementById('reg-email').value;
+  const pass = document.getElementById('reg-pass').value;
+  if(!email || !pass){ alert('Preencha tudo.'); return; }
+  localStorage.setItem('user-'+email, pass);
+  alert('Conta criada! Agora faça login.');
+}
+
+function loginUser(){
+  const email = document.getElementById('log-email').value;
+  const pass = document.getElementById('log-pass').value;
+  const saved = localStorage.getItem('user-'+email);
+  if(saved === pass){
+    localStorage.setItem('logged', email);
+    alert('Login realizado!');
+    document.getElementById('member-box').innerHTML = `<h3>Bem-vindo, ${email}</h3><button onclick="logout()">Sair</button>`;
+  }else alert('Credenciais incorretas.');
+}
+
+function logout(){ localStorage.removeItem('logged'); location.reload(); }
+
+window.onload = ()=>{
+  const logged = localStorage.getItem('logged');
+  if(logged){ document.getElementById('member-box').innerHTML = `<h3>Bem-vindo, ${logged}</h3><button onclick="logout()">Sair</button>`; }
+};
+</script>
 </body>
 </html>
