@@ -1,24 +1,159 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Produto 1</title>
-<style>
-  body { font-family: Arial; margin: 0; background: #f7f7f7; padding: 20px; }
-  img { width: 100%; border-radius: 10px; }
-  .btn { display: block; background: #111; color: #fff; padding: 12px;
-         text-align: center; margin-top: 15px; border-radius: 5px; text-decoration: none; }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Didaticalizando — Lojinha (Template)</title>
+  <style>
+    :root{--accent:#e67e22;--dark:#222;--muted:#666}
+    body{font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;margin:0;color:var(--dark);line-height:1.4}
+    header{background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:10}
+    .container{max-width:1100px;margin:0 auto;padding:16px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{font-weight:700;font-size:18px;color:var(--accent)}
+    nav a{margin:0 8px;color:var(--muted);text-decoration:none}
+    .search{flex:1;margin:0 12px}
+    .search input{width:100%;padding:8px;border:1px solid #ddd;border-radius:6px}
+    .hero{background:linear-gradient(90deg,#fff 0,#fbfbfb 100%);padding:28px 0}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+    .card{background:#fff;border:1px solid #eee;border-radius:8px;padding:12px;display:flex;flex-direction:column}
+    .card img{width:100%;height:140px;object-fit:cover;border-radius:6px}
+    .price{margin-top:auto;font-weight:700;color:var(--accent)}
+    footer{background:#fafafa;padding:24px;border-top:1px solid #eee;margin-top:28px}
+    .cart-btn{background:var(--accent);color:#fff;border:none;padding:8px 12px;border-radius:6px;cursor:pointer}
+    /* carrinho modal simples */
+    .cart-modal{position:fixed;right:16px;bottom:16px;width:320px;max-height:70vh;overflow:auto;background:#fff;border:1px solid #ddd;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.08);padding:12px;display:none}
+    .cart-list{list-style:none;padding:0;margin:0}
+    .cart-item{display:flex;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid #f2f2f2}
+    .cart-count{background:#ddd;padding:4px 8px;border-radius:999px;font-size:12px}
+    @media(max-width:600px){.topbar{flex-direction:column;align-items:flex-start}.search{order:3;width:100%}}
+  </style>
 </head>
 <body>
+<header>
+  <div class="container topbar">
+    <div class="brand">Didaticalizando — Template</div>
+    <nav>
+      <a href="#">Início</a>
+      <a href="#">Todos os produtos</a>
+      <a href="#">Minha conta</a>
+      <a href="#">Carrinho</a>
+    </nav>
+    <div style="display:flex;gap:8px;align-items:center">
+      <div class="search" style="max-width:360px"><input id="q" placeholder="Pesquisar produtos..." /></div>
+      <button id="openCart" class="cart-btn">Carrinho <span id="cartCount" class="cart-count" style="margin-left:8px">0</span></button>
+    </div>
+  </div>
+</header>
 
-<h2>Produto 1</h2>
-<img src="https://via.placeholder.com/600x400" alt="">
-<p>Descrição completa do produto 1.</p>
-<p><b>Preço: R$ 25,00</b></p>
+<main>
+  <section class="container hero">
+    <h1>Bem vindo à lojinha (template)</h1>
+    <p>Template estático inspirado no layout do Didaticalizando — produtos digitais para sala de aula.</p>
+  </section>
 
-<a class="btn" target="_blank" href="https://mpago.la/XXXXXXXX">Comprar agora (Mercado Pago)</a>
+  <section class="container" style="padding-top:18px">
+    <h2>Nossos produtos</h2>
+    <div id="products" class="grid" style="margin-top:12px"></div>
+  </section>
+</main>
 
+<!-- carrinho modal -->
+<div id="cart" class="cart-modal" aria-hidden="true">
+  <h3>Seu carrinho</h3>
+  <ul id="cartList" class="cart-list"></ul>
+  <div style="display:flex;justify-content:space-between;padding-top:12px">
+    <strong>Total: R$ <span id="cartTotal">0.00</span></strong>
+    <button id="checkout" class="cart-btn">Finalizar</button>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+      <div>© Didaticalizando — Template</div>
+      <div>Contato: didaticalizando@gmail.com</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // dados de exemplo (substitua pelos seus)
+  const sampleProducts = [
+    { id:1, title:'Painel Volta às Aulas', price:9.90, img:'https://via.placeholder.com/400x300?text=Painel' },
+    { id:2, title:'Kit Dia das Crianças', price:6.50, img:'https://via.placeholder.com/400x300?text=Kit' },
+    { id:3, title:'Painel Professores', price:7.00, img:'https://via.placeholder.com/400x300?text=Painel+Prof' },
+    { id:4, title:'Lembrancinha Tema', price:4.00, img:'https://via.placeholder.com/400x300?text=Lembrancinha' }
+  ];
+
+  const productsEl = document.getElementById('products');
+  const cartEl = document.getElementById('cart');
+  const cartListEl = document.getElementById('cartList');
+  const cartCountEl = document.getElementById('cartCount');
+  const cartTotalEl = document.getElementById('cartTotal');
+  let cart = {};
+
+  function renderProducts(list){
+    productsEl.innerHTML = '';
+    list.forEach(p=>{
+      const c = document.createElement('article');
+      c.className = 'card';
+      c.innerHTML = `
+        <img src="${p.img}" alt="${p.title}">
+        <h4>${p.title}</h4>
+        <div class="price">R$ ${p.price.toFixed(2)}</div>
+        <div style="margin-top:8px"><button class="cart-btn" data-id="${p.id}">Comprar</button></div>
+      `;
+      productsEl.appendChild(c);
+    });
+  }
+
+  function updateCartUI(){
+    cartListEl.innerHTML = '';
+    let total = 0; let count = 0;
+    Object.values(cart).forEach(item=>{
+      const li = document.createElement('li');
+      li.className = 'cart-item';
+      li.innerHTML = `<div style="flex:1">${item.title}</div>
+                      <div>R$ ${item.price.toFixed(2)}</div>
+                      <div style="margin-left:8px"><button data-id="${item.id}" class="remove">x</button></div>`;
+      cartListEl.appendChild(li);
+      total += item.price * item.qty;
+      count += item.qty;
+    });
+    cartTotalEl.textContent = total.toFixed(2);
+    cartCountEl.textContent = count;
+  }
+
+  document.addEventListener('click', e=>{
+    if(e.target.matches('.cart-btn') && e.target.dataset.id){
+      const id = Number(e.target.dataset.id);
+      const p = sampleProducts.find(x=>x.id===id);
+      if(!cart[id]) cart[id] = {...p, qty:0};
+      cart[id].qty += 1;
+      updateCartUI();
+    }
+    if(e.target.id==='openCart') {
+      cartEl.style.display = cartEl.style.display==='block' ? 'none' : 'block';
+    }
+    if(e.target.matches('.remove')) {
+      const id = Number(e.target.dataset.id);
+      if(cart[id]) { delete cart[id]; updateCartUI(); }
+    }
+    if(e.target.id==='checkout') {
+      alert('Checkout (simulado). Integre um gateway real como Mercado Pago para finalizar pagamentos.');
+    }
+  });
+
+  // pesquisa simples
+  document.getElementById('q').addEventListener('input', (ev)=>{
+    const q = ev.target.value.toLowerCase();
+    renderProducts(sampleProducts.filter(p=>p.title.toLowerCase().includes(q)));
+  });
+
+  // init
+  renderProducts(sampleProducts);
+  updateCartUI();
+</script>
 </body>
 </html>
