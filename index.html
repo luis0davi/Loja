@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tia Ceci Monte — Loja Educativa</title>
+  <meta name="description" content="Recursos pedagógicos digitais e impressos — Tia Ceci Monte" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- CSS EXTERNO -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="left">Nossa e-mail: atividadeseducativastioedy@gmail.com • Nosso telefone: 65 98403-4426</div>
+    <div class="right">
+      <a href="#">Instagram</a> • <a href="#">YouTube</a> • <a href="#">WhatsApp</a>
+    </div>
+  </div>
+
+  <header>
+    <div class="brand">
+      <div class="logo">
+        <div class="mark">TC</div>
+        <div>
+          <h1>Tia Ceci Monte</h1>
+          <p>Atividades educativas — PDFs & Kits</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <div class="search">
+        <input type="search" placeholder="Buscar no site" aria-label="Buscar">
+        <button>OK</button>
+      </div>
+      <div class="member">Área membro</div>
+    </div>
+  </header>
+
+  <nav class="main-menu" aria-label="Menu principal">
+    <a href="#"><i>🏠</i>INÍCIO</a>
+    <a href="#"><i>✉️</i>CONTATO</a>
+    <a href="#"><i>👩‍🏫</i>SOBRE</a>
+    <a href="#"><i>📝</i>BLOG</a>
+    <a href="#"><i>🧩</i>CATEGORIAS</a>
+    <a class="cart" href="#"><i>🛒</i>CARRINHO • R$0,00</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-viewport">
+      <div class="slide" style="background-image:url('/mnt/data/69f79e7f-d168-43da-b4d2-47e8552475e1.png')">
+        <div class="left">
+          <h2>Arquivos prontos para férias</h2>
+          <p class="muted">Kits temáticos, páginas para imprimir e atividades divertidas — prontos para serem usados.</p>
+          <div class="cta">
+            <a class="btn btn-primary" href="#catalog">Ver produtos</a>
+            <a class="btn btn-ghost" href="#">Grátis</a>
+          </div>
+          <div style="margin-top:12px" class="small">Entrega digital imediata após pagamento — PDF pronto.</div>
+        </div>
+        <div class="hero-thumbs">
+          <img src="/mnt/data/69f79e7f-d168-43da-b4d2-47e8552475e1.png">
+          <img src="/mnt/data/69f79e7f-d168-43da-b4d2-47e8552475e1.png">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <main class="container">
+    <section id="catalog">
+      <h3 style="margin-bottom:12px">Produtos em destaque</h3>
+      <div class="grid">
+
+        <!-- Product 1 -->
+        <article class="card">
+          <div class="thumb">Kit Valores</div>
+          <div class="meta">
+            <div>
+              <div style="font-weight:800">Kit Valores — Atividades</div>
+              <div class="small">PDF pronto para imprimir (45 páginas)</div>
+            </div>
+            <div class="price">R$ 12,00</div>
+          </div>
+          <div class="actions">
+            <button class="btn" onclick="openProduct(1)">Detalhes</button>
+            <button class="btn btn-primary" onclick="addToCart(1)">Comprar</button>
+          </div>
+        </article>
+
+        <!-- Product 2 -->
+        <article class="card">
+          <div class="thumb">Alfabetização</div>
+          <div class="meta">
+            <div>
+              <div style="font-weight:800">Alfabetiza Aventura</div>
+              <div class="small">Jogos e fichas para alfabetização</div>
+            </div>
+            <div class="price">R$ 20,00</div>
+          </div>
+          <div class="actions">
+            <button class="btn" onclick="openProduct(2)">Detalhes</button>
+            <button class="btn btn-primary" onclick="addToCart(2)">Comprar</button>
+          </div>
+        </article>
+
+        <!-- Product 3 -->
+        <article class="card">
+          <div class="thumb">NR-18</div>
+          <div class="meta">
+            <div>
+              <div style="font-weight:800">NR-18 — Apostila</div>
+              <div class="small">Resumo da norma (PDF)</div>
+            </div>
+            <div class="price">R$ 8,00</div>
+          </div>
+          <div class="actions">
+            <button class="btn" onclick="openProduct(3)">Detalhes</button>
+            <button class="btn btn-primary" onclick="addToCart(3)">Comprar</button>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section style="margin-top:18px;display:flex;gap:18px">
+      <div style="flex:2">
+        <h3>Sobre a Tia Ceci</h3>
+        <p class="muted">Sou professora e desenvolvo materiais práticos para sala de aula.</p>
+      </div>
+
+      <aside style="flex:1">
+        <div class="promo">
+          <h4 style="margin:0 0 6px">Promoção</h4>
+          <div style="font-weight:900;font-size:20px;color:var(--orange)">Kits 3x por R$18,00</div>
+          <p class="muted">Pacote temático para planejar atividades.</p>
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <a class="btn btn-primary" href="#">Comprar</a>
+            <a class="btn" href="#">Saber mais</a>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <footer>
+    <div class="foot-grid">
+      <div>
+        <div style="font-weight:800">Tia Ceci Monte</div>
+        <div class="small">Contato: tiaceci@example.com • WhatsApp</div>
+      </div>
+      <div style="text-align:right">
+        <div class="small">Siga nas redes</div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:6px">
+          <a href="#" class="small" style="color:white">Instagram</a>
+          <a href="#" class="small" style="color:white">WhatsApp</a>
+          <a href="#" class="small" style="color:white">YouTube</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL -->
+  <div id="modal" class="modal">
+    <div class="modal-box">
+      <h3 id="modal-title">Produto</h3>
+      <p id="modal-desc" class="muted">Descrição</p>
+
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <a id="buy-now" class="btn btn-primary" href="#">Comprar</a>
+        <a class="btn" href="#" onclick="closeModal()">Fechar</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS EXTERNO -->
+  <script src="script.js"></script>
+</body>
+</html>
