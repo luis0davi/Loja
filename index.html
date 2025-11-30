@@ -1,34 +1,408 @@
-<!doctype html> 
+<!-- Loja Digital (Option B - Colorida e Criativa)
+     Arquivo único: copie e cole como `index.html` no seu repositório GitHub
+
+INSTRUÇÕES RÁPIDAS:
+1) Crie um repositório no GitHub chamado `minha-loja` (ou outro nome).
+2) Coloque este arquivo como `index.html` na raiz do repositório.
+3) (Opcional) Crie uma pasta `downloads/` no repositório e faça upload dos seus PDFs/planilhas/artes.
+   - Ex.: `downloads/exemplo-planilha.xlsx`, `downloads/ebook.pdf`, `downloads/arte1.png`.
+4) Ative GitHub Pages nas configurações do repo (branch `main` / pasta `/root`).
+5) A loja ficará disponível em: https://SEU_USUARIO.github.io/NOME_DO_REPO
+
+OBSERVAÇÕES SOBRE PAGAMENTO:
+- Este exemplo simula o fluxo de pagamento (botão "Pagar (Simular)").
+- Para integrar Mercado Pago de verdade, gere uma "preference" no backend ou no painel do Mercado Pago e
+  substitua o comportamento de checkout no código (arquivo `checkoutWithMercadoPago()` no script).
+
+ADMIN:
+- Abra o botão "ADM" no canto superior direito.
+- Senha padrão: admin123 (mude no código se quiser)
+- O ADM pode adicionar produtos digitais (título, descrição, preço, arquivo de download relativo).
+- Produtos e carrinho são salvos no localStorage.
+
+--------------------------------------------------
+Código completo abaixo. Cole tudo em um arquivo `index.html` e publique.
+-------------------------------------------------- -->
+
+<!doctype html>
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Pagamento</title>
-  <link rel="stylesheet" href="css/styles.css" />
+  <title>Loja Digital — PDFs, Planilhas & Artes</title>
+  <style>
+    /* Reset simples */
+    :root{
+      --bg:#FFF7FB;
+      --card:#fff;
+      --accent1:#ff6b6b;
+      --accent2:#6b5bff;
+      --accent3:#ffd56b;
+      --muted:#6b6b6b;
+      --glass: rgba(255,255,255,0.6);
+      --shadow: 0 6px 20px rgba(107,91,255,0.12);
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin:0; background:linear-gradient(120deg,var(--bg) 0%, #FFF3F8 100%); color:#222}
+    header{display:flex;align-items:center;justify-content:space-between;padding:20px 28px}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:18px;box-shadow:var(--shadow)}
+    h1{margin:0;font-size:20px}
+    .tag{font-size:12px;color:var(--muted)}
+    .controls{display:flex;gap:10px;align-items:center}
+    button.btn{border:0;padding:10px 14px;border-radius:12px;background:var(--accent2);color:white;font-weight:600;cursor:pointer;box-shadow:var(--shadow)}
+    button.ghost{background:transparent;color:var(--accent2);border:2px solid rgba(107,91,255,0.12)}
+
+    /* Layout */
+    .container{max-width:1100px;margin:20px auto;padding:0 16px}
+    .grid{display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:start}
+
+    /* Produtos */
+    .products{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
+    .card{background:var(--card);border-radius:14px;padding:14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
+    .thumb{height:140px;border-radius:12px;background:linear-gradient(135deg,var(--accent3),#fff);display:flex;align-items:center;justify-content:center;font-weight:700}
+    .title{font-weight:700}
+    .desc{font-size:13px;color:var(--muted);min-height:36px}
+    .price{font-weight:800;color:var(--accent1)}
+    .card .actions{margin-top:auto;display:flex;gap:8px}
+
+    /* Carrinho */
+    aside.cart{position:sticky;top:24px;background:linear-gradient(180deg,#fff,#FFFDF8);padding:16px;border-radius:12px;box-shadow:var(--shadow)}
+    .cart h3{margin:0 0 8px 0}
+    .cart-list{display:flex;flex-direction:column;gap:8px;max-height:360px;overflow:auto;padding-right:6px}
+    .cart-item{display:flex;align-items:center;gap:8px}
+    .cart-item .meta{flex:1}
+    .small{font-size:13px;color:var(--muted)}
+    .total{display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-weight:800}
+
+    /* Modal */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;padding:20px}
+    .modal{background:white;border-radius:14px;padding:20px;max-width:560px;width:100%;box-shadow:0 24px 60px rgba(0,0,0,0.25)}
+
+    /* Admin */
+    .admin-btn{background:linear-gradient(90deg,var(--accent2),var(--accent1));padding:8px 12px;border-radius:10px;color:white;border:none}
+
+    /* Footer */
+    footer{margin:40px 0 80px 0;text-align:center;color:var(--muted)}
+
+    /* Responsive */
+    @media(max-width:900px){.grid{grid-template-columns:1fr}.container{padding:0 12px}}
+
+    /* Mini styles */
+    .badge{background:rgba(107,91,255,0.08);color:var(--accent2);padding:4px 8px;border-radius:999px;font-weight:700;font-size:12px}
+    input,textarea,select{padding:10px;border-radius:10px;border:1px solid rgba(27,27,27,0.06);width:100%}
+    .muted{color:var(--muted)}
+  </style>
 </head>
-
 <body>
+  <header>
+    <div class="brand">
+      <div class="logo">LD</div>
+      <div>
+        <h1>Loja Digital</h1>
+        <div class="tag">PDFs • Planilhas • Artes Digitais</div>
+      </div>
+    </div>
 
-<h1>Pagamento</h1>
+    <div class="controls">
+      <div class="badge" id="cartCount">0</div>
+      <button class="ghost" id="btnOpenCart">Carrinho</button>
+      <button class="admin-btn" id="btnOpenAdmin">ADM</button>
+    </div>
+  </header>
 
-<p>Total da compra: R$ <span id="total-pagamento"></span></p>
+  <main class="container">
+    <div class="grid">
+      <section>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <h2 style="margin:0">Produtos</h2>
+          <div class="small muted">Venda automática de arquivos após pagamento</div>
+        </div>
 
-<h3>Pague via PIX:</h3>
-<img src="img/qrcode.png" class="qr">
+        <div class="products" id="products"></div>
+      </section>
 
-<p>Ou clique no botão:</p>
+      <aside class="cart">
+        <h3>Seu Carrinho</h3>
+        <div class="cart-list" id="cartList"></div>
+        <div class="total">
+          <div>Total</div>
+          <div id="cartTotal">R$ 0,00</div>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:8px">
+          <button class="btn" id="btnCheckout">Pagar (Simular)</button>
+          <button class="ghost" id="btnClear">Limpar</button>
+        </div>
+        <div style="margin-top:8px;font-size:13px;color:var(--muted)">Obs: fluxo de pagamento demonstrativo.</div>
+      </aside>
+    </div>
 
-<a id="btn-pagar" class="botao" target="_blank">
-Carregando pagamento...
-</a>
+    <footer>
+      &copy; <span id="year"></span> Loja Digital — feito com ❤️
+    </footer>
+  </main>
 
-<script>
-  document.getElementById("total-pagamento").innerHTML =
-    localStorage.getItem("total") || "00,00";
-</script>
+  <!-- Modal: Cart (mobile) & Checkout -->
+  <div class="modal-backdrop" id="modal">
+    <div class="modal" id="modalContent"></div>
+  </div>
 
-<!-- Arquivo que cria a preference automaticamente -->
-<script src="js/pagamento.js"></script>
+  <!-- Admin modal -->
+  <div class="modal-backdrop" id="adminModal">
+    <div class="modal" style="max-width:760px">
+      <h3>Área ADM</h3>
+      <div id="adminArea">
+        <div style="margin-bottom:10px">
+          <label>Senha:</label>
+          <input type="password" id="adminPass" placeholder="Digite a senha" />
+          <button class="btn" id="btnLoginAdmin" style="margin-top:8px">Entrar</button>
+        </div>
+      </div>
+      <div style="margin-top:10px;text-align:right"><button class="ghost" id="btnCloseAdmin">Fechar</button></div>
+    </div>
+  </div>
 
+  <script>
+    // Loja Digital - Script
+    // Dados iniciais de exemplo
+    const defaultProducts = [
+      {id: 'p1', title: 'E-book: Guia Prático de Excel', desc: 'Planilhas e exemplos práticos para turbinar suas análises.', price: 25.00, file: 'downloads/planilha-exemplo.xlsx', thumb: '', type: 'planilha'},
+      {id: 'p2', title: 'PDF: Receitas Rápidas', desc: 'Coleção de 30 receitas fáceis.', price: 10.00, file: 'downloads/receitas.pdf', thumb: '', type: 'pdf'},
+      {id: 'p3', title: 'Pack de Artes - 5 Ilustrações', desc: 'Ilustrações em PNG 3000x3000.', price: 40.00, file: 'downloads/arte-pack.zip', thumb: '', type: 'arte'}
+    ];
+
+    // State
+    let products = [];
+    let cart = {};
+
+    // Utils
+    const money = v => 'R$ ' + v.toFixed(2).replace('.', ',');
+    const el = s => document.querySelector(s);
+
+    // Load
+    function loadState(){
+      const p = localStorage.getItem('loja_products');
+      products = p ? JSON.parse(p) : defaultProducts;
+      const c = localStorage.getItem('loja_cart');
+      cart = c ? JSON.parse(c) : {};
+    }
+
+    function saveState(){
+      localStorage.setItem('loja_products', JSON.stringify(products));
+      localStorage.setItem('loja_cart', JSON.stringify(cart));
+      render();
+    }
+
+    // Render produtos
+    function renderProducts(){
+      const wrap = el('#products'); wrap.innerHTML = '';
+      products.forEach(p => {
+        const card = document.createElement('div'); card.className='card';
+        card.innerHTML = `
+          <div class="thumb">${p.type.toUpperCase()}</div>
+          <div class="title">${p.title}</div>
+          <div class="desc">${p.desc}</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;"> 
+            <div class="price">${money(p.price)}</div>
+            <div class="actions">
+              <button class="btn" data-id="${p.id}">Adicionar</button>
+            </div>
+          </div>
+        `;
+        wrap.appendChild(card);
+      });
+      // bind add buttons
+      document.querySelectorAll('.card button.btn').forEach(b => b.addEventListener('click', e=>{
+        const id = e.currentTarget.dataset.id; addToCart(id);
+      }));
+    }
+
+    // Cart functions
+    function addToCart(id){
+      if(!cart[id]) cart[id]=0; cart[id]+=1; saveState();
+    }
+    function removeFromCart(id){
+      delete cart[id]; saveState();
+    }
+    function changeQty(id, qty){
+      if(qty<=0) removeFromCart(id); else { cart[id]=qty; saveState(); }
+    }
+
+    function renderCart(){
+      const list = el('#cartList'); list.innerHTML='';
+      let total=0;
+      Object.keys(cart).forEach(id=>{
+        const p = products.find(x=>x.id===id);
+        if(!p) return;
+        const qty = cart[id];
+        const item = document.createElement('div'); item.className='cart-item';
+        item.innerHTML = `
+          <div style="width:48px;height:48px;border-radius:8px;background:linear-gradient(90deg,var(--accent3),#fff);display:flex;align-items:center;justify-content:center">${p.type}</div>
+          <div class="meta">
+            <div style="font-weight:700">${p.title}</div>
+            <div class="small">${money(p.price)} x ${qty}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+            <input type="number" min="0" value="${qty}" data-id="${id}" style="width:68px;padding:6px;border-radius:8px;border:1px solid #eee" />
+            <button class="ghost" data-remove="${id}">Remover</button>
+          </div>
+        `;
+        list.appendChild(item);
+        total += p.price * qty;
+      });
+      el('#cartTotal').innerText = money(total);
+      el('#cartCount').innerText = Object.values(cart).reduce((a,b)=>a+b,0);
+
+      // bind quantity changes
+      list.querySelectorAll('input[type=number]').forEach(inp=>{
+        inp.addEventListener('change', e=>{ const id=e.target.dataset.id; changeQty(id, Number(e.target.value)); });
+      });
+      list.querySelectorAll('button[data-remove]').forEach(b=>b.addEventListener('click', e=>{ const id=e.currentTarget.dataset.remove; removeFromCart(id); }));
+    }
+
+    // Checkout (SIMULADO)
+    function checkoutWithMercadoPago(){
+      // Aqui é o ponto onde você substituiria por integração real.
+      // Para demo, abrimos um modal de "confirmação" e depois exibimos links de download.
+      showModal(`
+        <h3>Confirmar Pagamento</h3>
+        <p>Você será direcionado para o pagamento (simulado). Clique em Pagar para finalizar e liberar os arquivos.</p>
+        <div style="display:flex;gap:10px;margin-top:12px">
+          <button class="btn" id="confirmPay">Pagar (Simular)</button>
+          <button class="ghost" id="cancelPay">Cancelar</button>
+        </div>
+      `);
+      document.getElementById('confirmPay').addEventListener('click', ()=>{
+        // Simula sucesso de pagamento
+        const purchased = Object.keys(cart).map(id=>({id, qty: cart[id]}));
+        // cria lista de links de download com base nos arquivos do produto
+        let html = '<h3>Pagamento Concluído ✅</h3><p>Seus downloads:</p><ul>';
+        purchased.forEach(it=>{
+          const p = products.find(x=>x.id===it.id);
+          if(p){
+            html += `<li><strong>${p.title}</strong> — <a href="${p.file}" target="_blank" download>Baixar: ${p.file.split('/').pop()}</a></li>`;
+          }
+        });
+        html += '</ul><div style="margin-top:12px"><button class="btn" id="doneFinish">Fechar</button></div>';
+        showModal(html);
+        document.getElementById('doneFinish').addEventListener('click', ()=>{ cart={}; saveState(); closeModal(); });
+      });
+      document.getElementById('cancelPay').addEventListener('click', ()=> closeModal());
+    }
+
+    // Modal helpers
+    function showModal(html){
+      const modal = el('#modal'); modal.style.display='flex'; el('#modalContent').innerHTML = html;
+    }
+    function closeModal(){ document.getElementById('modal').style.display='none'; }
+
+    // Admin
+    const ADMIN_PASS = 'admin123'; // mude aqui
+    function openAdmin(){ el('#adminModal').style.display='flex'; }
+    function closeAdmin(){ el('#adminModal').style.display='none'; }
+    function showAdminPanel(){
+      const area = el('#adminArea');
+      area.innerHTML = `
+        <div style="display:grid;grid-template-columns:1fr 120px;gap:8px;margin-bottom:8px">
+          <input id="prodTitle" placeholder="Título do produto" />
+          <input id="prodPrice" placeholder="Preço (ex: 19.90)" />
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 180px;gap:8px;margin-bottom:8px">
+          <input id="prodFile" placeholder="Arquivo (ex: downloads/arquivo.pdf)" />
+          <select id="prodType"><option value="pdf">PDF</option><option value="planilha">Planilha</option><option value="arte">Arte</option></select>
+        </div>
+        <textarea id="prodDesc" placeholder="Descrição curta"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn" id="btnAddProd">Adicionar Produto</button>
+          <button class="ghost" id="btnExport">Exportar JSON</button>
+        </div>
+        <div style="margin-top:12px">
+          <h4>Produtos atuais</h4>
+          <div id="adminProductsList" style="display:flex;flex-direction:column;gap:8px;max-height:220px;overflow:auto"></div>
+        </div>
+      `;
+
+      document.getElementById('btnAddProd').addEventListener('click', ()=>{
+        const t = document.getElementById('prodTitle').value.trim();
+        const pr = Number(document.getElementById('prodPrice').value) || 0;
+        const file = document.getElementById('prodFile').value.trim();
+        const type = document.getElementById('prodType').value;
+        const desc = document.getElementById('prodDesc').value.trim();
+        if(!t||!file){ alert('Título e arquivo são obrigatórios'); return; }
+        const id = 'p'+Date.now();
+        products.push({id,title:t,desc,price:pr,file,type,thumb:''});
+        saveState();
+        renderAdminProducts();
+        document.getElementById('prodTitle').value='';document.getElementById('prodPrice').value='';document.getElementById('prodFile').value='';document.getElementById('prodDesc').value='';
+      });
+
+      document.getElementById('btnExport').addEventListener('click', ()=>{
+        const data = JSON.stringify(products, null, 2);
+        showModal(`<h3>JSON de Produtos</h3><pre style="max-height:400px;overflow:auto">${data}</pre><div style="margin-top:12px"><button class='btn' id='closeJson'>Fechar</button></div>`);
+        document.getElementById('closeJson').addEventListener('click', closeModal);
+      });
+
+      renderAdminProducts();
+    }
+
+    function renderAdminProducts(){
+      const list = document.getElementById('adminProductsList'); list.innerHTML='';
+      products.forEach(p=>{
+        const row = document.createElement('div'); row.style.display='flex';row.style.justifyContent='space-between';row.style.alignItems='center';
+        row.innerHTML = `<div><strong>${p.title}</strong><div class='small muted'>${p.file} • ${money(p.price)}</div></div><div style='display:flex;gap:8px'><button class='ghost' data-edit='${p.id}'>Editar</button><button class='ghost' data-del='${p.id}'>Apagar</button></div>`;
+        list.appendChild(row);
+      });
+      list.querySelectorAll('button[data-del]').forEach(b=>b.addEventListener('click', e=>{
+        const id = e.currentTarget.dataset.del; if(confirm('Apagar produto?')){ products = products.filter(x=>x.id!==id); saveState(); renderAdminProducts(); }
+      }));
+      list.querySelectorAll('button[data-edit]').forEach(b=>b.addEventListener('click', e=>{
+        const id = e.currentTarget.dataset.edit; const p = products.find(x=>x.id===id);
+        const t = prompt('Título', p.title); if(t===null) return; p.title = t;
+        const pr = prompt('Preço', p.price); if(pr!==null) p.price = Number(pr);
+        const f = prompt('Arquivo', p.file); if(f!==null) p.file = f;
+        saveState(); renderAdminProducts();
+      }));
+    }
+
+    // Events
+    document.getElementById('btnOpenCart').addEventListener('click', ()=>{
+      let html = '<h3>Seu Carrinho</h3>';
+      if(Object.keys(cart).length===0) html += '<p>Seu carrinho está vazio.</p>';
+      else{
+        html += '<ul>' + Object.keys(cart).map(id=>{ const p = products.find(x=>x.id===id); return `<li>${p.title} x ${cart[id]} — ${money(p.price*cart[id])}</li>` }).join('') + '</ul>';
+      }
+      html += '<div style="display:flex;gap:8px;margin-top:12px"><button class="btn" id="goPay">Ir para pagamento</button><button class="ghost" id="closeCart">Fechar</button></div>';
+      showModal(html);
+      document.getElementById('closeCart').addEventListener('click', closeModal);
+      if(document.getElementById('goPay')) document.getElementById('goPay').addEventListener('click', ()=>{ closeModal(); checkoutWithMercadoPago(); });
+    });
+
+    document.getElementById('btnCheckout').addEventListener('click', ()=>{ if(Object.keys(cart).length===0) return alert('Carrinho vazio'); checkoutWithMercadoPago(); });
+    document.getElementById('btnClear').addEventListener('click', ()=>{ if(confirm('Limpar carrinho?')){ cart={}; saveState(); }});
+
+    // Admin open
+    document.getElementById('btnOpenAdmin').addEventListener('click', openAdmin);
+    document.getElementById('btnCloseAdmin').addEventListener('click', closeAdmin);
+    document.getElementById('btnLoginAdmin').addEventListener('click', ()=>{
+      const pass = document.getElementById('adminPass').value;
+      if(pass===ADMIN_PASS){ showAdminPanel(); } else { alert('Senha incorreta'); }
+    });
+
+    // Modal close when clicking backdrop
+    document.getElementById('modal').addEventListener('click', e=>{ if(e.target.id==='modal') closeModal(); });
+    document.getElementById('adminModal').addEventListener('click', e=>{ if(e.target.id==='adminModal') closeAdmin(); });
+
+    // Init
+    document.getElementById('year').innerText = new Date().getFullYear();
+    loadState(); renderProducts(); renderCart();
+
+    // Re-render helper
+    function render(){ renderProducts(); renderCart(); }
+
+    // Auto-save on unload
+    window.addEventListener('beforeunload', ()=>{ saveState(); });
+
+  </script>
 </body>
 </html>
