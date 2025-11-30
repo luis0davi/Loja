@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pagamento</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+
+<h1>Pagamento</h1>
+
+<p>Total da compra: R$ <span id="total-pagamento"></span></p>
+
+<h3>Pague via PIX:</h3>
+<img src="img/qrcode.png" class="qr">
+
+<p>Ou clique no botão:</p>
+
+<a href="https://www.mercadopago.com.br/checkout/v1/redirect?preference-id=SUA-PREFERENCE" 
+class="botao">
+Pagar no Mercado Pago
+</a>
+
+<script>
+document.getElementById("total-pagamento").innerHTML =
+  localStorage.getItem("total") || "00,00";
+</script>
+
+</body>
+</html>
