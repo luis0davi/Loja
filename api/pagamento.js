@@ -2,7 +2,7 @@ import mercadopago from "mercadopago";
 
 export default async function handler(req, res) {
   mercadopago.configure({
-    access_token: process.env.MP_ACCESS_TOKEN
+    access_token: TEST-214699310458254-112813-dcd8d534d55423ea64ed273f44701838-776186295
   });
 
   const preference = {
