@@ -1,0 +1,1 @@
+Os arquivos completos estão no documento "Loja-tema-2-refactor". Copie e cole o conteúdo de cada seção (index.html, styles.css, app.js, pagamento.js, admin.js) nos arquivos correspondentes após extrair este ZIP.
