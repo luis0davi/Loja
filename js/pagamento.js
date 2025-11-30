@@ -14,7 +14,7 @@ async function gerarLinkPagamento() {
         title: "Compra na Loja",
         quantity: 1,
         currency_id: "BRL",
-        unit_price: Number(total)
+        unit_price: "100"
       }
     ]
   };
