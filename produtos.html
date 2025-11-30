@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Produtos — Tia Ceci Store</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+<header>
+  <h1>Produtos</h1>
+  <nav>
+    <a href="index.html">Início</a>
+    <a href="carrinho.html">Carrinho</a>
+  </nav>
+</header>
+
+<section class="produtos">
+
+  <div class="produto">
+    <img src="img/planner.jpg">
+    <h3>Planner 2025</h3>
+    <p>R$ 12,00</p>
+    <button onclick="adicionarCarrinho('Planner 2025',12,'planner2025.pdf')">Adicionar ao Carrinho</button>
+  </div>
+
+  <div class="produto">
+    <img src="img/planilha.png">
+    <h3>Planilha Financeira Pro</h3>
+    <p>R$ 20,00</p>
+    <button onclick="adicionarCarrinho('Planilha Financeira Pro',20,'financeira.xlsx')">Adicionar ao Carrinho</button>
+  </div>
+
+  <div class="produto">
+    <img src="img/artes.png">
+    <h3>Pack de Artes para Instagram</h3>
+    <p>R$ 15,00</p>
+    <button onclick="adicionarCarrinho('Pack de Artes para Instagram',15,'pack-instagram.zip')">Adicionar ao Carrinho</button>
+  </div>
+
+</section>
+
+<script src="js/app.js"></script>
+</body>
+</html>
