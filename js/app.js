@@ -81,31 +81,31 @@ function renderProducts(filter='all', q=''){
 // modal functions
 function openProduct(id){
   const p = PRODUCTS[id];
-  if(!p) return alert('Produto não encontrado');
   document.getElementById('modal-title').textContent = p.title;
   document.getElementById('modal-desc').textContent = p.desc + ' — Preço: R$' + p.price.toFixed(2);
-  // images
+
   const imgs = document.getElementById('modal-images');
   imgs.innerHTML = '';
-  if(p.imgs && p.imgs.length){
+  if (p.imgs && p.imgs.length){
     p.imgs.forEach(src=>{
-      const img = document.createElement('img'); img.src = src; imgs.appendChild(img);
+      const img = document.createElement('img');
+      img.src = src;
+      imgs.appendChild(img);
     });
-  } else {
-    imgs.innerHTML = '<div class="small">Sem imagens</div>';
   }
-  const buyBtn = document.getElementById('buy-now');
-  buyBtn.onclick = (e)=>{
-  e.preventDefault();
-  addToCartId(p.id);
-  alert("Adicionado ao carrinho!");
-  closeModal();
-};
 
-  // buy now button
   const buyBtn = document.getElementById('buy-now');
-  buyBtn.onclick = (e)=>{ e.preventDefault(); addToCartId(p.id); openCart(); }
+  buyBtn.textContent = "Adicionar ao carrinho";
+  buyBtn.onclick = (e)=>{
+    e.preventDefault();
+    addToCartId(p.id);
+    alert("Adicionado ao carrinho!");
+    closeModal();
+  };
+
   document.getElementById('modal').style.display = 'flex';
+}
+
 }
 
 function closeModal(){ document.getElementById('modal').style.display = 'none'; }
