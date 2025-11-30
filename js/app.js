@@ -94,6 +94,14 @@ function openProduct(id){
   } else {
     imgs.innerHTML = '<div class="small">Sem imagens</div>';
   }
+  const buyBtn = document.getElementById('buy-now');
+  buyBtn.onclick = (e)=>{
+  e.preventDefault();
+  addToCartId(p.id);
+  alert("Adicionado ao carrinho!");
+  closeModal();
+};
+
   // buy now button
   const buyBtn = document.getElementById('buy-now');
   buyBtn.onclick = (e)=>{ e.preventDefault(); addToCartId(p.id); openCart(); }
