@@ -1,1 +1,71 @@
-/* Cole aqui o styles.css do documento */
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #f4f4f4;
+}
+
+header {
+  background: #222;
+  padding: 15px;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+}
+
+.produtos {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.produto {
+  background: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px #0003;
+}
+
+.produto img {
+  width: 100%;
+  border-radius: 5px;
+}
+
+button, .botao {
+  background: #008cff;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 6px;
+  display: inline-block;
+  text-align: center;
+}
+
+button:hover, .botao:hover {
+  background: #006ad1;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #0007;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  width: 90%;
+  max-width: 450px;
+  border-radius: 8px;
+}
+
+.close {
+  float: right;
+  cursor: pointer;
+  font-size: 22px;
+}
