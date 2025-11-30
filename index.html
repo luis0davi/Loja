@@ -1,57 +1,28 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Loja Digital — PDFs, Planilhas e Artes</title>
-
-  <link rel="stylesheet" href="css/styles.css" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tia Ceci Store</title>
+<link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
 
 <header>
-  <h1>Loja Digital</h1>
-  <p>PDFs • Planilhas • Artes Digitais</p>
+  <h1>Tia Ceci Store</h1>
+  <nav>
+    <a href="index.html">Início</a>
+    <a href="produtos.html">Produtos</a>
+    <a href="carrinho.html">Carrinho</a>
+  </nav>
 </header>
 
-<main class="produtos">
+<section class="hero">
+  <h2>Bem-vinda à Tia Ceci Store!</h2>
+  <p>PDFs, planilhas e artes digitais de alta qualidade.</p>
+  <a class="botao" href="produtos.html">Ver Produtos</a>
+</section>
 
-  <!-- PRODUTO 1 -->
-  <div class="produto">
-    <img src="img/produto1.png" alt="Produto">
-    <h3>Planilha Financeira Completa</h3>
-    <p>Controle financeiro, metas, gastos e relatórios automáticos.</p>
-    <strong>R$ 9,90</strong>
-    <button onclick="comprar('Planilha Financeira', 9.90, 'downloads/planilha-financeira.zip')">
-      Comprar
-    </button>
-  </div>
-
-  <!-- PRODUTO 2 -->
-  <div class="produto">
-    <img src="img/produto2.png" alt="Produto">
-    <h3>Pacote 20 Artes Canva</h3>
-    <p>Templates editáveis profissionais para mídias sociais.</p>
-    <strong>R$ 12,90</strong>
-    <button onclick="comprar('Pacote Artes Canva', 12.90, 'downloads/artes-canva.zip')">
-      Comprar
-    </button>
-  </div>
-
-  <!-- PRODUTO 3 -->
-  <div class="produto">
-    <img src="img/produto3.png" alt="Produto">
-    <h3>E-book — Produtividade</h3>
-    <p>Guia completo PDF com 40 páginas.</p>
-    <strong>R$ 7,90</strong>
-    <button onclick="comprar('E-book Produtividade', 7.90, 'downloads/ebook-produtividade.pdf')">
-      Comprar
-    </button>
-  </div>
-
-</main>
-
-<script src="https://sdk.mercadopago.com/js/v2"></script>
-<script src="js/pagamento.js"></script>
 </body>
 </html>
