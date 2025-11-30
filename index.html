@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tia Ceci Monte — Loja Educativa</title>
+  <meta name="description" content="Recursos pedagógicos digitais e impressos — Tia Ceci Monte" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Mercado Pago SDK (opcional, apenas para componentes) -->
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="topbar">
+    <div class="left">Nossa e-mail: atividadeseducativastioedy@gmail.com • Nosso telefone: 65 98403-4426</div>
+    <div class="right">
+      <a href="#">Instagram</a> • <a href="#">YouTube</a> • <a href="#">WhatsApp</a>
+    </div>
+  </div>
+
+  <header>
+    <div class="brand">
+      <div class="logo">
+        <div class="mark">TC</div>
+        <div>
+          <h1>Tia Ceci Monte</h1>
+          <p>Atividades educativas — PDFs & Kits</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <div class="search">
+        <input id="search-input" type="search" placeholder="Buscar no site" aria-label="Buscar">
+        <button id="search-btn">OK</button>
+      </div>
+      <div class="member">
+        Área membro
+        <button id="open-admin" title="Abrir painel admin (local)">⚙️</button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="main-menu" aria-label="Menu principal">
+    <a href="#"><i>🏠</i>INÍCIO</a>
+    <a href="#catalog"><i>🧾</i>PRODUTOS</a>
+    <a href="#about"><i>👩‍🏫</i>SOBRE</a>
+    <a href="#" id="open-cart"><i>🛒</i>CARRINHO • R$0,00</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-viewport">
+      <div class="slide" id="slide-1" style="background-image:url('/mnt/data/69f79e7f-d168-43da-b4d2-47e8552475e1.png')">
+        <div class="left">
+          <h2>Arquivos prontos para férias</h2>
+          <p class="muted">Kits temáticos, páginas para imprimir e atividades divertidas — prontos para serem usados em sala ou em casa.</p>
+          <div class="cta">
+            <a class="btn btn-primary" href="#catalog">Ver produtos</a>
+            <a class="btn btn-ghost" href="#">Grátis</a>
+          </div>
+          <div style="margin-top:12px" class="small">Entrega digital imediata após pagamento — arquivos em PDF prontos para baixar.</div>
+        </div>
+        <div class="hero-thumbs">
+          <img src="/mnt/data/69f79e7f-d168-43da-b4d2-47e8552475e1.png" alt="thumb">
+          <img src="/mnt/data/69f79e7f-d168-43da-b4d2-47e8552475e1.png" alt="thumb">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <main class="container">
+    <section id="catalog">
+      <h3 style="margin-bottom:12px">Produtos em destaque</h3>
+      <div class="controls" style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
+        <select id="category-filter">
+          <option value="all">Todas as categorias</option>
+        </select>
+        <button class="btn" id="open-admin-panel">Painel ADMIN (local)</button>
+      </div>
+
+      <div class="grid" id="product-grid">
+        <!-- Produtos injetados por JS -->
+      </div>
+    </section>
+
+    <section id="about" style="margin-top:18px;display:flex;gap:18px">
+      <div style="flex:2">
+        <h3>Sobre a Tia Ceci</h3>
+        <p class="muted">Sou professora e desenvolvo materiais práticos para sala de aula. Aqui você encontra recursos prontos para imprimir, usar em rodas de conversa, oficinas e muito mais.</p>
+      </div>
+      <aside style="flex:1">
+        <div class="promo">
+          <h4 style="margin:0 0 6px">Promoção</h4>
+          <div style="font-weight:900;font-size:20px;color:var(--orange)">Kits 3x por R$18,00</div>
+          <p class="muted">Pacote temático para planejar uma semana inteira de atividades.</p>
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <a class="btn btn-primary" href="#">Comprar</a>
+            <a class="btn" href="#">Saber mais</a>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <footer>
+    <div class="foot-grid">
+      <div>
+        <div style="font-weight:800">Tia Ceci Monte</div>
+        <div class="small">Contato: tiaceci@example.com • WhatsApp: (00) 90000-0000</div>
+      </div>
+      <div style="text-align:right">
+        <div class="small">Siga nas redes</div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:6px">
+          <a href="#" class="small" style="color:white">Instagram</a>
+          <a href="#" class="small" style="color:white">WhatsApp</a>
+          <a href="#" class="small" style="color:white">YouTube</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal product detail -->
+  <div id="modal" class="modal" style="display:none">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal()">✖</button>
+      <h3 id="modal-title">Produto</h3>
+      <p id="modal-desc" class="muted">Descrição</p>
+      <div id="modal-images" class="modal-images"></div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button id="buy-now" class="btn btn-primary">Comprar</button>
+        <button class="btn" onclick="closeModal()">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart panel -->
+  <div id="cart-panel" class="cart-panel" style="display:none">
+    <button class="cart-close" onclick="closeCart()">✖</button>
+    <h3>Seu carrinho</h3>
+    <div id="cart-box"></div>
+    <div style="margin-top:12px">
+      <button class="btn btn-primary" id="checkout-btn">Ir para o pagamento</button>
+    </div>
+  </div>
+
+  <!-- Admin panel (local only) -->
+  <div id="admin-panel" class="modal" style="display:none">
+    <div class="modal-box">
+      <button class="modal-close" onclick="toggleAdmin(false)">✖</button>
+      <h3>Painel Admin (local)</h3>
+      <form id="admin-form">
+        <label>Nome do produto</label>
+        <input id="admin-name" required>
+        <label>Preço (R$)</label>
+        <input id="admin-price" type="number" step="0.01" required>
+        <label>Categoria</label>
+        <input id="admin-cat" required>
+        <label>Descrição</label>
+        <textarea id="admin-desc"></textarea>
+        <label>Download filename (ex: doc.pdf)</label>
+        <input id="admin-file">
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn btn-primary" type="submit">Salvar produto</button>
+          <button class="btn" type="button" onclick="seedSampleProducts()">Restaurar amostra</button>
+        </div>
+      </form>
+      <hr>
+      <h4>Produtos (localStorage)</h4>
+      <div id="admin-list"></div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script src="js/pagamento.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
