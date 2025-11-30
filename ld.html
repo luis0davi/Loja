@@ -1,0 +1,14 @@
+<button id="comprar">Gerar Pagamento</button>
+
+<script>
+document.getElementById("comprar").addEventListener("click", async () => {
+  const req = await fetch("/api/pagamento");
+  const data = await req.json();
+
+  if (data.link) {
+    window.location.href = data.link; // redireciona para o pagamento
+  } else {
+    alert("Erro ao gerar pagamento");
+  }
+});
+</script>
