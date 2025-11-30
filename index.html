@@ -1,28 +1,103 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Tia Ceci Store</title>
-<link rel="stylesheet" href="css/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loja Simples</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+    .produto {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 300px;
+    }
+    .produto img {
+      width: 100%;
+      border-radius: 10px;
+    }
+    .produto h2 {
+      margin: 15px 0 5px;
+    }
+    .produto p {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+    }
+    #btn-pagar {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #3483fa;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+    #btn-pagar:hover {
+      background-color: #2968c8;
+    }
+  </style>
 </head>
-
 <body>
 
-<header>
-  <h1>Tia Ceci Store</h1>
-  <nav>
-    <a href="index.html">Início</a>
-    <a href="produtos.html">Produtos</a>
-    <a href="carrinho.html">Carrinho</a>
-  </nav>
-</header>
+<div class="produto">
+  <img src="https://via.placeholder.com/300x200.png?text=Produto" alt="Produto">
+  <h2>Produto Exemplo</h2>
+  <p id="preco">R$ 20,00</p>
+  <a id="btn-pagar" href="#" target="_blank">Pagar</a>
+</div>
 
-<section class="hero">
-  <h2>Bem-vinda à Tia Ceci Store!</h2>
-  <p>PDFs, planilhas e artes digitais de alta qualidade.</p>
-  <a class="botao" href="produtos.html">Ver Produtos</a>
-</section>
+<script>
+  // Seu Access Token de TESTE
+  const accessToken = "TEST-214699310458254-112813-dcd8d534d55423ea64ed273f44701838-776186295";
+
+  // Valor do produto
+  const valor = 20.00;
+
+  async function gerarLinkPagamento() {
+    const url = "https://api.mercadopago.com/checkout/preferences";
+
+    const dados = {
+      items: [
+        {
+          title: "Produto Exemplo",
+          quantity: 1,
+          currency_id: "BRL",
+          unit_price: Number(valor)
+        }
+      ]
+    };
+
+    const req = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer " + accessToken,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(dados)
+    });
+
+    const res = await req.json();
+
+    console.log(res);
+
+    // link de pagamento pronto
+    document.getElementById("btn-pagar").href = res.init_point;
+  }
+
+  // Gera o link ao carregar a página
+  gerarLinkPagamento();
+</script>
 
 </body>
 </html>
