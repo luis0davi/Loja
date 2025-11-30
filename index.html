@@ -1,1 +1,58 @@
-<!-- Cole aqui o index.html do documento -->
+<!doctype html>
+
+
+<main class="layout">
+<section class="hero">
+<div class="hero-left">
+<h2>Atividades prontas para as férias</h2>
+<p class="muted">Kits temáticos, páginas para imprimir e atividades divertidas — prontos para uso em sala ou em casa.</p>
+<div class="cta">
+<a href="#catalog" class="btn primary">Ver produtos</a>
+<a href="#" class="btn ghost">Grátis</a>
+</div>
+</div>
+<div class="hero-right">
+<img src="/assets/sample-1.jpg" alt="hero"/>
+</div>
+</section>
+
+
+<section id="catalog" class="catalog">
+<div class="catalog-header">
+<h3>Produtos em destaque</h3>
+<div>
+<select id="category-filter" aria-label="Filtrar categoria">
+<option value="all">Todas as categorias</option>
+</select>
+</div>
+</div>
+
+
+<div id="product-grid" class="grid"></div>
+</section>
+
+
+<section id="about" class="about">
+<h3>Sobre a Tia Ceci</h3>
+<p class="muted">Professora criadora de materiais práticos para sala de aula — atividades para alfabetização, valores e muito mais.</p>
+</section>
+</main>
+
+
+<footer class="site-footer">
+<div>Tia Ceci Monte • contatos: tiaceci@example.com</div>
+<div>© <span id="year"></span></div>
+</footer>
+
+
+<!-- modals/panels -->
+<div id="modal" class="modal" aria-hidden="true"></div>
+<div id="cart-panel" class="cart-panel" aria-hidden="true"></div>
+<div id="admin-panel" class="admin-panel" aria-hidden="true"></div>
+
+
+<script src="/js/app.js"></script>
+<script src="/js/admin.js"></script>
+<script src="/js/pagamento.js"></script>
+</body>
+</html>
