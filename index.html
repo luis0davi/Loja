@@ -1,39 +1,50 @@
 <!doctype html>
-<html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Minha Loja</title>
-  <link rel="stylesheet" href="css/styles.css" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>NOME_DA_LOJA — Home</title>
+<link rel="stylesheet" href="css/styles.css">
 </head>
-
 <body>
-
-<header>
-  <h1>Minha Loja</h1>
-  <button id="btnCarrinho">🛒 Carrinho <span id="contador">0</span></button>
+<header class="site-header">
+<h1>NOME_DA_LOJA</h1>
+<nav>
+<a href="index.html">Home</a>
+<a href="produtos.html">Produtos</a>
+<a href="adm.html">Admin</a>
+<button id="open-cart-btn">Carrinho (<span id="cart-count">0</span>)</button>
+</nav>
 </header>
 
-<main class="produtos" id="lista-produtos">
-  <!-- Produtos são carregados automaticamente -->
+
+<main class="container">
+<section class="hero">
+<h2>Bem-vindo à nossa lojinha</h2>
+<p>Produtos, planilhas, PDFs e muito mais. Pronto para começar?</p>
+<a class="btn" href="produtos.html">Ver produtos</a>
+</section>
+
+
+<section id="featured" class="grid"></section>
 </main>
 
-<!-- Modal do Carrinho -->
-<div class="modal" id="modal-carrinho">
-  <div class="modal-content">
-    <span class="close" id="fecharModal">&times;</span>
-    <h2>Seu Carrinho</h2>
 
-    <div id="itens-carrinho"></div>
-
-    <div class="total">
-      Total: R$ <span id="total"></span>
-    </div>
-
-    <a href="pagamento.html" class="btn-finalizar">Finalizar Compra</a>
-  </div>
+<!-- Carrinho Modal simples -->
+<div id="cart-modal" class="modal hidden">
+<div class="modal-content">
+<button id="close-cart">Fechar</button>
+<h3>Seu carrinho</h3>
+<div id="cart-items"></div>
+<div class="cart-footer">
+<strong>Total: R$ <span id="cart-total">0.00</span></strong>
+<button id="checkout-btn" class="btn">Finalizar compra</button>
+</div>
+</div>
 </div>
 
+
 <script src="js/app.js"></script>
+<script src="js/pagamento.js"></script>
 </body>
 </html>
+
