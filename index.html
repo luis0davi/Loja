@@ -1,103 +1,298 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Loja Simples</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tia Ceci Monte — Loja Educativa</title>
+  <meta name="description" content="Recursos pedagógicos digitais e impressos — Tia Ceci Monte" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-color: #f4f4f4;
+    :root{
+      --blue:#00A8E8;
+      --orange:#FF8C00;
+      --yellow:#FFC400;
+      --muted:#6b7280;
+      --card:#ffffff;
+      --bg:#fffdf9;
+      --radius:12px;
+      --shadow:0 8px 20px rgba(16,24,40,0.08);
     }
-    .produto {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
-      text-align: center;
-      width: 300px;
+    *{box-sizing:border-box}
+    body{margin:0;font-family:'Poppins',system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;background:var(--bg);color:#111}
+
+    /* TOPBAR */
+    .topbar{background:var(--blue);color:#fff;padding:8px 18px;font-size:14px;display:flex;justify-content:space-between;align-items:center}
+    .topbar .left{display:flex;gap:18px;align-items:center}
+    .topbar a{color:#fff;text-decoration:none;font-weight:600}
+
+    /* HEADER */
+    header{background:#fff;padding:16px 18px;border-bottom:6px solid var(--orange);display:flex;align-items:center;justify-content:space-between;gap:18px}
+    .brand{display:flex;align-items:center;gap:14px}
+    .logo{display:flex;align-items:center;gap:10px}
+    .logo .mark{width:86px;height:86px;border-radius:12px;background:linear-gradient(135deg,var(--yellow),var(--orange));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px;box-shadow:var(--shadow)}
+    .brand h1{margin:0;font-size:20px}
+    .brand p{margin:0;color:var(--muted);font-size:13px}
+
+    .header-actions{display:flex;align-items:center;gap:12px}
+    .member{background:var(--orange);color:#111;padding:10px 14px;border-radius:8px;font-weight:700}
+    .search{display:flex;gap:6px}
+    .search input{padding:10px 12px;border:2px solid var(--orange);border-radius:8px;width:220px}
+    .search button{background:var(--orange);border:none;padding:10px 12px;border-radius:8px;color:#111;cursor:pointer;font-weight:700}
+
+    /* MAIN MENU (blocks) */
+    .main-menu{display:flex;gap:0;max-width:1200px;margin:0 auto;overflow:hidden;border-radius:8px}
+    .main-menu a{flex:1;padding:16px 10px;text-align:center;color:#fff;text-decoration:none;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center}
+    .main-menu a i{display:block;margin-bottom:6px;font-size:18px;opacity:0.95}
+    .main-menu a:nth-child(1){background:var(--orange)}
+    .main-menu a:nth-child(2){background:var(--blue)}
+    .main-menu a:nth-child(3){background:#FF6B00}
+    .main-menu a:nth-child(4){background:var(--yellow);color:#111}
+    .main-menu a:nth-child(5){background:var(--blue)}
+    .main-menu a:nth-child(6){background:var(--yellow);color:#111}
+    .main-menu .cart{background:#FFD24A;color:#111}
+
+    /* HERO / SLIDER */
+    .hero{position:relative;max-width:1200px;margin:18px auto;padding:0 18px}
+    .hero-viewport{position:relative;border-radius:16px;overflow:hidden}
+    .slide{min-height:360px;background-size:cover;background-position:center;display:flex;align-items:center;gap:28px;padding:28px}
+    .slide::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,0.2),rgba(255,255,255,0.0));pointer-events:none}
+    .slide .left{max-width:560px;background:rgba(255,255,255,0.9);padding:22px;border-radius:14px;box-shadow:var(--shadow)}
+    .slide h2{margin:0 0 8px;font-size:28px}
+    .slide p{margin:0;color:var(--muted)}
+    .slide .cta{margin-top:12px}
+    .hero-thumbs{display:flex;flex-direction:column;gap:8px;align-items:center}
+    .hero-thumbs img{width:160px;border-radius:12px;box-shadow:var(--shadow)}
+
+    /* PRODUCTS */
+    .container{max-width:1200px;margin:22px auto;padding:0 18px}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .card{background:var(--card);padding:12px;border-radius:12px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
+    .card .thumb{height:160px;border-radius:10px;background:linear-gradient(135deg,var(--blue),var(--orange));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800}
+    .meta{display:flex;justify-content:space-between;align-items:center}
+    .price{font-weight:900;color:var(--orange)}
+    .small{color:var(--muted);font-size:13px}
+    .card .actions{display:flex;gap:8px}
+
+    /* SIDEBAR PROMO */
+    .promo{background:linear-gradient(180deg,#fff,#fff0);padding:16px;border-radius:12px;border:3px dashed #ffd8a8}
+
+    /* FOOTER */
+    footer{background:#081226;color:#fff;padding:22px;border-top-left-radius:18px;border-top-right-radius:18px}
+    .foot-grid{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:0 18px}
+
+    /* RESPONSIVE */
+    @media (max-width:980px){
+      .grid{grid-template-columns:repeat(2,1fr)}
+      .slide{flex-direction:column}
+      .hero-thumbs{flex-direction:row}
     }
-    .produto img {
-      width: 100%;
-      border-radius: 10px;
+    @media (max-width:620px){
+      .main-menu{flex-direction:column}
+      .grid{grid-template-columns:1fr}
+      .search input{width:140px}
+      .logo .mark{width:64px;height:64px}
     }
-    .produto h2 {
-      margin: 15px 0 5px;
-    }
-    .produto p {
-      font-size: 18px;
-      font-weight: bold;
-      color: #333;
-    }
-    #btn-pagar {
-      display: inline-block;
-      margin-top: 15px;
-      padding: 10px 20px;
-      background-color: #3483fa;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 5px;
-      font-weight: bold;
-    }
-    #btn-pagar:hover {
-      background-color: #2968c8;
-    }
+
+    /* small helpers */
+    .muted{color:var(--muted)}
+    .btn{display:inline-block;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:700;cursor:pointer;}
+    .btn-primary{background:var(--orange);color:#111}
+    .btn-ghost{background:transparent;border:2px solid var(--orange);color:var(--orange)}
   </style>
 </head>
 <body>
+  <div class="topbar">
+    <div class="left">Nossa e-mail: atividadeseducativastioedy@gmail.com &nbsp; • &nbsp; Nosso telefone: 65 98403-4426</div>
+    <div class="right">
+      <a href="#">Instagram</a>&nbsp;•&nbsp;<a href="#">YouTube</a>&nbsp;•&nbsp;<a href="#">WhatsApp</a>
+    </div>
+  </div>
 
-<div class="produto">
-  <img src="https://via.placeholder.com/300x200.png?text=Produto" alt="Produto">
-  <h2>Produto Exemplo</h2>
-  <p id="preco">R$ 20,00</p>
-  <a id="btn-pagar" href="#" target="_blank">Pagar</a>
-</div>
+  <header>
+    <div class="brand">
+      <div class="logo">
+        <div class="mark">TC</div>
+        <div>
+          <h1>Tia Ceci Monte</h1>
+          <p>Atividades educativas — PDFs & Kits</p>
+        </div>
+      </div>
+    </div>
 
-<script>
-  // Seu Access Token de TESTE
-  const accessToken = "TEST-214699310458254-112813-dcd8d534d55423ea64ed273f44701838-776186295";
+    <div class="header-actions" id="member-box">
+      <div class="search">
+        <input type="search" placeholder="Buscar no site" aria-label="Buscar">
+        <button>OK</button>
+      </div>
+      <div class="member">Área membro</div>
+    </div>
+  </header>
 
-  // Valor do produto
-  const valor = 20.00;
+  <nav class="main-menu" aria-label="Menu principal">
+    <a href="#"><i>🏠</i>INÍCIO</a>
+    <a href="#"><i>✉️</i>CONTATO</a>
+    <a href="#"><i>👩‍🏫</i>SOBRE</a>
+    <a href="#"><i>📝</i>BLOG</a>
+    <a href="#"><i>🧩</i>CATEGORIAS</a>
+    <a class="cart" href="#"><i>🛒</i>CARRINHO • R$0,00</a>
+  </nav>
 
-  async function gerarLinkPagamento() {
-    const url = "https://api.mercadopago.com/checkout/preferences";
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-viewport">
+      <div class="slide" style="background-image:url('https://via.placeholder.com/800x360.png?text=Hero')">
+        <div class="left">
+          <h2>Arquivos prontos para férias</h2>
+          <p class="muted">Kits temáticos, páginas para imprimir e atividades divertidas — prontos para serem usados em sala ou em casa.</p>
+          <div class="cta">
+            <a class="btn btn-primary" href="#catalog">Ver produtos</a>
+            <a class="btn btn-ghost" href="#">Grátis</a>
+          </div>
+          <div style="margin-top:12px" class="small">Entrega digital imediata após pagamento — arquivos em PDF prontos para baixar.</div>
+        </div>
+        <div class="hero-thumbs">
+          <img src="https://via.placeholder.com/160x100.png?text=Thumb" alt="thumb">
+          <img src="https://via.placeholder.com/160x100.png?text=Thumb" alt="thumb">
+        </div>
+      </div>
+    </div>
+  </section>
 
-    const dados = {
-      items: [
-        {
-          title: "Produto Exemplo",
-          quantity: 1,
-          currency_id: "BRL",
-          unit_price: Number(valor)
-        }
-      ]
-    };
+  <!-- PRODUCTS -->
+  <main class="container">
+    <section id="catalog">
+      <h3 style="margin-bottom:12px">Produtos em destaque</h3>
+      <div class="grid" id="products-grid">
+        <!-- Os produtos serão renderizados via JS -->
+      </div>
+    </section>
 
-    const req = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Authorization": "Bearer " + accessToken,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(dados)
+    <section style="margin-top:18px;display:flex;gap:18px">
+      <div style="flex:2">
+        <h3>Sobre a Tia Ceci</h3>
+        <p class="muted">Sou professora e desenvolvo materiais práticos para sala de aula. Aqui você encontra recursos prontos para imprimir, usar em rodas de conversa, oficinas e muito mais.</p>
+      </div>
+      <aside style="flex:1">
+        <div class="promo">
+          <h4 style="margin:0 0 6px">Promoção</h4>
+          <div style="font-weight:900;font-size:20px;color:var(--orange)">Kits 3x por R$18,00</div>
+          <p class="muted">Pacote temático para planejar uma semana inteira de atividades.</p>
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <a class="btn btn-primary" href="#">Comprar</a>
+            <a class="btn" href="#">Saber mais</a>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <footer>
+    <div class="foot-grid">
+      <div>
+        <div style="font-weight:800">Tia Ceci Monte</div>
+        <div class="small">Contato: tiaceci@example.com • WhatsApp: (00) 90000‑0000</div>
+      </div>
+      <div style="text-align:right">
+        <div class="small">Siga nas redes</div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:6px">
+          <a href="#" class="small" style="color:white">Instagram</a>
+          <a href="#" class="small" style="color:white">WhatsApp</a>
+          <a href="#" class="small" style="color:white">YouTube</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal product detail -->
+  <div id="modal" style="display:none;position:fixed;inset:0;align-items:center;justify-content:center;background:rgba(0,0,0,0.4)">
+    <div style="background:#fff;padding:18px;border-radius:12px;max-width:720px;margin:0 18px">
+      <h3 id="modal-title">Produto</h3>
+      <p id="modal-desc" class="muted">Descrição</p>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <a id="buy-now" class="btn btn-primary" href="#">Comprar</a>
+        <a class="btn" href="#" onclick="closeModal()">Fechar</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- PRODUTOS ---
+    const PRODUCTS = [
+      {id:1,title:'Kit Valores — Atividades',desc:'PDF com 45 páginas para trabalhar valores e convivência. Entrega digital após pagamento.',price:12,img:'https://via.placeholder.com/300x160.png?text=Kit+Valores'},
+      {id:2,title:'Alfabetiza Aventura',desc:'Jogos e fichas para alfabetização. Páginas para recortar e jogar.',price:20,img:'https://via.placeholder.com/300x160.png?text=Alfabetiza+Aventura'},
+      {id:3,title:'NR‑18 — Apostila',desc:'Resumo da NR‑18 em linguagem didática, fichas e exercícios.',price:8,img:'https://via.placeholder.com/300x160.png?text=NR-18'}
+    ];
+
+    // --- CARRINHO ---
+    const CART = [];
+    function addToCart(id){
+      const product = PRODUCTS.find(p=>p.id===id);
+      CART.push(product);
+      alert(product.title + ' adicionado ao carrinho');
+      updateCartLabel();
+    }
+    function updateCartLabel(){
+      const cart = document.querySelector('.main-menu .cart');
+      if(cart) cart.innerHTML = '🛒 CARRINHO • R$' + CART.reduce((s,p)=>s+p.price,0).toFixed(2);
+    }
+
+    // --- MODAL ---
+    function openProduct(id){
+      const p = PRODUCTS.find(prod=>prod.id===id);
+      document.getElementById('modal-title').textContent = p.title;
+      document.getElementById('modal-desc').textContent = p.desc + ' — Preço: R$' + p.price.toFixed(2);
+      document.getElementById('buy-now').onclick = function(e){
+        e.preventDefault();
+        checkout(p);
+      };
+      document.getElementById('modal').style.display = 'flex';
+    }
+    function closeModal(){ document.getElementById('modal').style.display = 'none'; }
+
+    // --- MERCADO PAGO ---
+    const accessToken = "TEST-214699310458254-112813-dcd8d534d55423ea64ed273f44701838-776186295";
+    async function gerarLinkPagamento(product) {
+      const url = "https://api.mercadopago.com/checkout/preferences";
+      const dados = { items: [{ title: product.title, quantity:1, currency_id:"BRL", unit_price:product.price }] };
+      const res = await fetch(url,{
+        method:"POST",
+        headers:{"Authorization":"Bearer "+accessToken,"Content-Type":"application/json"},
+        body:JSON.stringify(dados)
+      }).then(r=>r.json());
+      return res.init_point;
+    }
+
+    function checkout(product){
+      closeModal();
+      gerarLinkPagamento(product).then(link=>{
+        if(link) window.open(link, "_blank");
+      });
+    }
+
+    // --- RENDERIZA PRODUTOS ---
+    const grid = document.getElementById('products-grid');
+    PRODUCTS.forEach(p=>{
+      const card = document.createElement('article');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="thumb"><img src="${p.img}" style="width:100%;border-radius:10px"/></div>
+        <div class="meta">
+          <div>
+            <div style="font-weight:800">${p.title}</div>
+            <div class="small">${p.desc}</div>
+          </div>
+          <div class="price">R$ ${p.price.toFixed(2)}</div>
+        </div>
+        <div class="actions">
+          <button class="btn" onclick="openProduct(${p.id})">Detalhes</button>
+          <button class="btn btn-primary" onclick="checkout(${p.id})">Comprar</button>
+        </div>
+      `;
+      grid.appendChild(card);
     });
 
-    const res = await req.json();
-
-    console.log(res);
-
-    // link de pagamento pronto
-    document.getElementById("btn-pagar").href = res.init_point;
-  }
-
-  // Gera o link ao carregar a página
-  gerarLinkPagamento();
-</script>
-
+    // --- INIT ---
+    document.addEventListener('DOMContentLoaded',()=>{ updateCartLabel(); });
+  </script>
 </body>
 </html>
