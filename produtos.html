@@ -1,47 +1,323 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Produtos — Tia Ceci Store</title>
-<link rel="stylesheet" href="css/styles.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TIA CECILIA — Loja Digital</title>
+  <style>
+    /* ====== Reset e básico ====== */
+    :root{--primary:#F9E6E0;--accent:#FFB6B6;--text:#333;--muted:#666}
+    *{box-sizing:border-box}
+    body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin:0; color:var(--text); background:#fff}
+    header{background:linear-gradient(180deg,var(--primary),#fff);padding:18px 20px;border-bottom:1px solid #eee;display:flex;align-items:center;justify-content:space-between}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#fff,rgba(255,255,255,0.3));display:flex;align-items:center;justify-content:center;font-weight:700;color:#b33}
+    h1{font-size:20px;margin:0}
+    .subtitle{font-size:13px;color:var(--muted)}
+
+    main{padding:20px;max-width:1200px;margin:0 auto}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
+    .card{border:1px solid #f0e6e6;border-radius:12px;padding:14px;background:#fff;box-shadow:0 6px 18px rgba(200,150,150,0.03)}
+    .cover{width:100%;height:220px;border-radius:8px;background-size:cover;background-position:center;margin-bottom:12px}
+    .title{font-weight:700;margin:6px 0}
+    .price{font-weight:800;color:#b23;margin:6px 0}
+    .meta{font-size:13px;color:var(--muted)}
+    .btn{display:inline-block;padding:8px 12px;border-radius:8px;background:var(--accent);color:#6b0000;font-weight:700;border:none;cursor:pointer}
+    .btn.secondary{background:#fff;border:1px solid #ffdede;color:#b23}
+    footer{padding:18px;text-align:center;color:var(--muted)}
+
+    /* Carrinho botão */
+    .cart-btn{position:relative}
+    .cart-count{position:absolute;right:-8px;top:-8px;background:#b23;color:#fff;width:22px;height:22px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:12px}
+
+    /* Modal do carrinho */
+    .modal{position:fixed;right:20px;bottom:20px;width:380px;background:#fff;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.12);padding:16px;display:none;z-index:50}
+    .modal.open{display:block}
+    .cart-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px dashed #eee}
+    .cart-item img{width:64px;height:64px;border-radius:8px;object-fit:cover}
+    .qty{display:flex;gap:6px;align-items:center}
+    .small{font-size:13px;color:var(--muted)}
+    .checkout-actions{display:flex;gap:8px;margin-top:12px}
+
+    /* Responsive */
+    @media(max-width:600px){.modal{right:10px;left:10px;width:auto}}
+
+    /* Informações extras */
+    .notice{background:#fff3f3;border-left:4px solid #ffdede;padding:10px;border-radius:8px;margin-bottom:12px}
+    .admin-link{font-size:13px;color:var(--muted);text-decoration:underline;cursor:pointer}
+  </style>
 </head>
-
 <body>
+  <header>
+    <div class="brand">
+      <div class="logo">TC</div>
+      <div>
+        <h1>TIA CECILIA — Loja Digital</h1>
+        <div class="subtitle">Recursos pedagógicos e planilhas — PDFs & Excel</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;align-items:center">
+      <div class="notice" style="padding:8px;border-radius:8px">Estilo: Infantil • Produtos iniciais adicionados</div>
+      <button id="openCart" class="btn cart-btn">Carrinho <span id="cartCount" class="cart-count">0</span></button>
+    </div>
+  </header>
 
-<header>
-  <h1>Produtos</h1>
-  <nav>
-    <a href="index.html">Início</a>
-    <a href="carrinho.html">Carrinho</a>
-  </nav>
-</header>
+  <main>
+    <section style="margin-bottom:18px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h2 style="margin:0">Produtos</h2>
+        <div class="small">Exemplo com 4 produtos iniciais — use o botão Adicionar no Carrinho</div>
+      </div>
+    </section>
 
-<section class="produtos">
+    <section class="grid" id="productGrid">
+      <!-- Produtos serão carregados por JS -->
+    </section>
 
-  <div class="produto">
-    <img src="img/planner.jpg">
-    <h3>Planner 2025</h3>
-    <p>R$ 12,00</p>
-    <button onclick="adicionarCarrinho('Planner 2025',12,'planner2025.pdf')">Adicionar ao Carrinho</button>
+    <section style="margin-top:20px">
+      <p class="small">Dica: você pode editar o array <code>PRODUCTS</code> no final do arquivo para ajustar preços, títulos e links de download (use os arquivos que eu gerei: <code>tia_cecilia_produtos.zip</code>).</p>
+    </section>
+  </main>
+
+  <!-- Modal do Carrinho -->
+  <div id="cartModal" class="modal" aria-hidden="true">
+    <h3 style="margin:0 0 8px 0">Seu Carrinho</h3>
+    <div id="cartItems"></div>
+
+    <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center">
+      <strong>Total:</strong>
+      <strong id="cartTotal">R$ 0,00</strong>
+    </div>
+
+    <div class="checkout-actions">
+      <button id="checkoutMP" class="btn">Pagar com Mercado Pago</button>
+      <button id="checkoutPix" class="btn secondary">Pagar com PIX</button>
+    </div>
+
+    <div style="margin-top:10px;display:flex;justify-content:space-between">
+      <button id="closeCart" class="btn secondary">Fechar</button>
+      <button id="clearCart" class="btn secondary">Esvaziar</button>
+    </div>
+
+    <!-- Pix modal interno -->
+    <div id="pixBox" style="display:none;margin-top:12px;padding:10px;border:1px dashed #eee;border-radius:8px">
+      <p class="small">Copie o payload PIX abaixo e cole no seu app bancário ou gere QR com ele.</p>
+      <textarea id="pixPayload" style="width:100%;height:88px;font-size:13px">00020126360014BR.GOV.BCB.PIX0136+5584999999995204000053039865408.005802BR5925TIA CECILIA6009FORTALEZA61080540900062070503***6304FFFF</textarea>
+      <div style="display:flex;gap:8px;margin-top:6px">
+        <button id="copyPix" class="btn">Copiar PIX</button>
+        <button id="closePix" class="btn secondary">Fechar PIX</button>
+      </div>
+    </div>
   </div>
 
-  <div class="produto">
-    <img src="img/planilha.png">
-    <h3>Planilha Financeira Pro</h3>
-    <p>R$ 20,00</p>
-    <button onclick="adicionarCarrinho('Planilha Financeira Pro',20,'financeira.xlsx')">Adicionar ao Carrinho</button>
-  </div>
+  <footer>
+    <small>Feito com ❤️ para TIA CECILIA — entregue como site estático (pronto para GitHub Pages)</small>
+  </footer>
 
-  <div class="produto">
-    <img src="img/artes.png">
-    <h3>Pack de Artes para Instagram</h3>
-    <p>R$ 15,00</p>
-    <button onclick="adicionarCarrinho('Pack de Artes para Instagram',15,'pack-instagram.zip')">Adicionar ao Carrinho</button>
-  </div>
+  <script>
+    /* ====== Dados dos produtos (edite aqui) ====== */
+    const PRODUCTS = [
+      {
+        id: 'pack-alfabetizacao',
+        title: 'Pack Alfabetização — Amostra',
+        price: 12.00,
+        description: 'PDF amostra com atividades iniciais (9 páginas).',
+        cover: 'sandbox:/mnt/data/tia_cecilia_produtos/pack_alfabetizacao/cover_pack_alfabetizacao.png',
+        file: 'sandbox:/mnt/data/tia_cecilia_produtos/pack_alfabetizacao/pack_alfabetizacao_amostra.pdf'
+      },
+      {
+        id: 'planner-2025',
+        title: 'Planner Professor 2025',
+        price: 12.00,
+        description: 'Planner anual para organização do ano letivo.',
+        cover: 'sandbox:/mnt/data/tia_cecilia_produtos/planner_professor_2025/cover_planner_2025.png',
+        file: 'sandbox:/mnt/data/tia_cecilia_produtos/planner_professor_2025/planner_professor_2025.pdf'
+      },
+      {
+        id: 'ativ-infantil',
+        title: 'Atividades Educação Infantil',
+        price: 10.00,
+        description: 'Jogos e fichas para crianças de 3 a 6 anos (amostra).',
+        cover: 'sandbox:/mnt/data/tia_cecilia_produtos/atividades_educacao_infantil/cover_atividades_infantil.png',
+        file: 'sandbox:/mnt/data/tia_cecilia_produtos/atividades_educacao_infantil/atividades_educacao_infantil.pdf'
+      },
+      {
+        id: 'planilha-fin',
+        title: 'Planilha Financeira Pessoal',
+        price: 20.00,
+        description: 'Excel com entradas, saídas, metas e resumo automático.',
+        cover: 'sandbox:/mnt/data/tia_cecilia_produtos/planilha_financeira_pessoal/planilha_financeira_pessoal.xlsx',
+        file: 'sandbox:/mnt/data/tia_cecilia_produtos/planilha_financeira_pessoal/planilha_financeira_pessoal.xlsx'
+      }
+    ];
 
-</section>
+    /* ====== Helpers ====== */
+    const money = v => v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 
-<script src="js/app.js"></script>
+    /* ====== Render produtos ====== */
+    const grid = document.getElementById('productGrid');
+    PRODUCTS.forEach(p => {
+      const card = document.createElement('article');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="cover" style="background-image:url('${p.cover}')"></div>
+        <div class="title">${p.title}</div>
+        <div class="meta">${p.description}</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+          <div>
+            <div class="price">${money(p.price)}</div>
+            <div class="small">Download digital — entrega imediata</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <button class="btn add-to-cart" data-id="${p.id}">Adicionar no carrinho</button>
+            <a class="btn secondary" href="${p.file}" target="_blank" rel="noopener">Visualizar</a>
+          </div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+    /* ====== Carrinho (LocalStorage) ====== */
+    const CART_KEY = 'tia_cecilia_cart_v1';
+    let cart = JSON.parse(localStorage.getItem(CART_KEY) || '{}');
+
+    function saveCart(){ localStorage.setItem(CART_KEY, JSON.stringify(cart)); updateCartUI(); }
+
+    function addToCart(productId, qty=1){
+      cart[productId] = (cart[productId] || 0) + qty; saveCart(); }
+
+    function removeFromCart(productId){ delete cart[productId]; saveCart(); }
+    function setQty(productId, qty){ if(qty<=0) removeFromCart(productId); else { cart[productId]=qty; saveCart(); } }
+
+    function cartItemsArray(){
+      return Object.keys(cart).map(id => {
+        const product = PRODUCTS.find(p=>p.id===id);
+        return { ...product, qty: cart[id] };
+      });
+    }
+
+    function cartTotal(){
+      return cartItemsArray().reduce((s,i)=>s + (i.price * i.qty), 0);
+    }
+
+    /* ====== UI eventos ====== */
+    document.querySelectorAll('.add-to-cart').forEach(btn=>{
+      btn.addEventListener('click', e=>{
+        const id = e.currentTarget.dataset.id; addToCart(id); animateButton(e.currentTarget);
+      })
+    });
+
+    function animateButton(btn){ btn.style.transform='scale(0.98)'; setTimeout(()=>btn.style.transform='',160); }
+
+    const openCartBtn = document.getElementById('openCart');
+    const cartModal = document.getElementById('cartModal');
+    const closeCart = document.getElementById('closeCart');
+    const clearCartBtn = document.getElementById('clearCart');
+
+    openCartBtn.addEventListener('click', ()=>{ cartModal.classList.toggle('open'); renderCartItems(); });
+    closeCart.addEventListener('click', ()=>{ cartModal.classList.remove('open'); });
+    clearCartBtn.addEventListener('click', ()=>{ cart={}; saveCart(); });
+
+    function renderCartItems(){
+      const container = document.getElementById('cartItems'); container.innerHTML='';
+      const items = cartItemsArray();
+      if(items.length===0){ container.innerHTML='<p class="small">Seu carrinho está vazio.</p>'; }
+      items.forEach(it=>{
+        const div = document.createElement('div'); div.className='cart-item';
+        div.innerHTML = `
+          <img src="${it.cover}" alt="${it.title}" />
+          <div style="flex:1">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start">
+              <div>
+                <div style="font-weight:700">${it.title}</div>
+                <div class="small">${money(it.price)} cada</div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-weight:800">${money(it.price * it.qty)}</div>
+                <div class="small">Qtd: <span>${it.qty}</span></div>
+              </div>
+            </div>
+            <div style="margin-top:8px;display:flex;gap:8px;align-items:center">
+              <div class="qty">
+                <button class="btn secondary dec" data-id="${it.id}">-</button>
+                <div class="small" style="padding:6px 8px;background:#fff;border:1px solid #f0e0e0;border-radius:6px">${it.qty}</div>
+                <button class="btn" data-id="${it.id}" style="padding:6px 8px">+</button>
+              </div>
+              <button class="btn secondary remove" data-id="${it.id}">Remover</button>
+            </div>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+
+      // attach events
+      container.querySelectorAll('.dec').forEach(b=>b.addEventListener('click', e=>{ const id=e.currentTarget.dataset.id; setQty(id, (cart[id]||1)-1); }));
+      container.querySelectorAll('.btn:not(.dec):not(.remove)').forEach(b=>{ if(b.dataset.id) b.addEventListener('click', e=>{ const id=e.currentTarget.dataset.id; setQty(id, (cart[id]||0)+1); }); });
+      container.querySelectorAll('.remove').forEach(b=>b.addEventListener('click', e=>{ removeFromCart(e.currentTarget.dataset.id); }));
+
+      document.getElementById('cartTotal').textContent = money(cartTotal());
+    }
+
+    function updateCartUI(){
+      const count = Object.values(cart).reduce((s,v)=>s+v,0);
+      document.getElementById('cartCount').textContent = count;
+      document.getElementById('cartTotal').textContent = money(cartTotal());
+      // re-render if modal aberto
+      if(cartModal.classList.contains('open')) renderCartItems();
+    }
+
+    // Inicializar
+    updateCartUI();
+
+    /* ====== Checkout (integração básica) ====== */
+    // 1) Mercado Pago: Para criar um fluxo real você precisa gerar uma "preference" no servidor com o Access Token
+    //    (por segurança, o Access Token NÃO deve ficar no frontend). Depois que a preferência for criada você terá
+    //    um `preference_id` que pode ser usado pelo SDK do Mercado Pago no frontend para abrir o checkout.
+    //    Aqui deixamos um botão que abre um link caso você insira `PREFERENCE_ID` abaixo.
+
+    const checkoutMP = document.getElementById('checkoutMP');
+    const PREFERENCE_ID = '';
+    // Se você quiser testar sem backend, crie manualmente uma preferência no painel do Mercado Pago (modo teste)
+    // e cole o id aqui (ex: '123456789-abcdef') — o botão então abrirá o checkout.
+
+    checkoutMP.addEventListener('click', ()=>{
+      if(!Object.keys(cart).length) { alert('Seu carrinho está vazio.'); return; }
+      if(!PREFERENCE_ID){
+        // alternativa: gerar link próprio para pagamento (ex: Mercado Pago Link / Pix) e abrir em nova aba
+        const lines = cartItemsArray().map(i=>`${i.title} x${i.qty} - ${money(i.price*i.qty)}`).join('\n');
+        const texto = encodeURIComponent(`Pedido - TIA CECILIA\n\n${lines}\n\nTotal: ${money(cartTotal())}\n\nPagar via Mercado Pago (insira preferência no backend)`);
+        // abre uma nova aba com um formulário de contato (exemplo) — substitua pelo seu link de pagamento real.
+        window.open(`mailto:seu-email@dominio.com?subject=Pedido%20TIA%20CECILIA&body=${texto}`,'_blank');
+        alert('Nenhuma PREFERENCE_ID configurada. Abri seu app de email para enviar pedido (teste).');
+        return;
+      }
+      // Se tiver PREFERENCE_ID, você poderia redirecionar ao checkout com o SDK do Mercado Pago (exemplo):
+      // const mpScript = document.createElement('script'); mpScript.src = 'https://sdk.mercadopago.com/js/v2';
+      // ... inicializar com public key e chamar checkout
+    });
+
+    // 2) Pix: mostramos um payload simples que o vendedor (você) pode personalizar
+    const checkoutPix = document.getElementById('checkoutPix');
+    const pixBox = document.getElementById('pixBox');
+    const pixPayloadTA = document.getElementById('pixPayload');
+    const copyPixBtn = document.getElementById('copyPix');
+    const closePix = document.getElementById('closePix');
+
+    checkoutPix.addEventListener('click', ()=>{
+      if(!Object.keys(cart).length){ alert('Seu carrinho está vazio.'); return; }
+      pixBox.style.display = 'block';
+    });
+    copyPixBtn.addEventListener('click', ()=>{
+      navigator.clipboard.writeText(pixPayloadTA.value).then(()=>{ alert('PIX copiado! Cole no app do banco para pagar.'); });
+    });
+    closePix.addEventListener('click', ()=>{ pixBox.style.display='none'; });
+
+    /* ====== Observações finais ====== */
+    // - Para ativar o Mercado Pago real: implemente um endpoint no seu servidor (Node, Python, PHP) que faça POST
+    //   para https://api.mercadopago.com/checkout/preferences com os itens do carrinho e retorne preference_id.
+    // - Para publicar: crie um repositório no GitHub, adicione este arquivo `index.html` e ative GitHub Pages (branch main).
+    // - Se quiser, eu já gero o código do servidor (ex: Node/Express) para criar preference automaticamente.
+
+  </script>
 </body>
 </html>
