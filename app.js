@@ -2,7 +2,7 @@
 const productsContainer = document.getElementById('products');
 let cart = JSON.parse(localStorage.getItem('cart_v1') || '[]');
 document.getElementById('cartCount').innerText = cart.length;
-
+API_URL = "https://script.google.com/macros/s/AKfycbyX7lB_L1L4l2u3-xoWmyWD8pgilqcGgh2ma1sJ3VwErU9DFBe9PYV2JXUDYatRQ_BJ/exec"
 async function fetchProducts(){
   try{
     const res = await fetch(API_URL + '?action=getProducts');
