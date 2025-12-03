@@ -1,76 +1,39 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Minha Loja Digital</title>
-
-<style>
-  body {
-    font-family: Arial;
-    padding: 20px;
-    background: #fafafa;
-  }
-  h1 { text-align: center; }
-
-  .produto {
-    padding: 15px;
-    background: white;
-    border-radius: 10px;
-    margin-bottom: 15px;
-    box-shadow: 0 0 8px #ccc;
-  }
-
-  img {
-    width: 120px;
-    border-radius: 8px;
-  }
-
-  button {
-    margin-top: 10px;
-    padding: 10px;
-    background: #008cff;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-</style>
+<link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-  <h1>Minha Loja Digital</h1>
-  <h3>🛒 Carrinho (<span id="qtd">0</span>)</h3>
 
-  <div id="lista"></div>
+<header>
+  <h1>Minha Loja Digital</h1>
+  <nav>
+    <span id="cartBtn">🛒 Carrinho (<span id="cartCount">0</span>)</span>
+  </nav>
+</header>
+
+<!-- LISTA DE PRODUTOS -->
+<section id="products"></section>
+
+<!-- CARRINHO -->
+<section id="cartModal" class="modal hidden">
+  <div class="modal-content">
+    <h2>Seu Carrinho</h2>
+    <div id="cartItems"></div>
+    <button id="checkoutBtn">Finalizar Compra</button>
+    <button onclick="closeCart()">Fechar</button>
+  </div>
+</section>
 
 <script>
-google.script.run.withSuccessHandler(mostrarProdutos).produtosAPI();
-
-function mostrarProdutos(produtos) {
-  let html = "";
-
-  produtos.forEach(p => {
-    html += `
-      <div class="produto">
-        <img src="${p.imagem}">
-        <h3>${p.nome}</h3>
-        <p>${p.descricao}</p>
-        <p><b>R$ ${p.preco}</b></p>
-        <button onclick="addCarrinho('${p.nome}')">Adicionar ao carrinho</button>
-      </div>
-    `;
-  });
-
-  document.getElementById("lista").innerHTML = html;
-}
-
-let qtd = 0;
-function addCarrinho() {
-  qtd++;
-  document.getElementById("qtd").innerHTML = qtd;
-}
+const API = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSb0v1uXOIBWYaP5qBI9C626i7KHDr_3v9UbR1TgT_SADBEp2VvnVlVNFAJE2wUGKJ3Ni3HORkQJ3vq/pubhtml#gid=0";
 </script>
+
+<script src="js/app.js"></script>
 
 </body>
 </html>
