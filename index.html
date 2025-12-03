@@ -1,39 +1,45 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Minha Loja Digital</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Loja — TioEdy-like</title>
 <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
-<header>
-  <h1>Minha Loja Digital</h1>
-  <nav>
-    <span id="cartBtn">🛒 Carrinho (<span id="cartCount">0</span>)</span>
-  </nav>
+<header class="site-header">
+  <div class="wrap">
+    <h1 class="brand">TioEdy Style — Minha Loja</h1>
+    <div class="actions">
+      <button id="openCartBtn">🛒 Carrinho (<span id="cartCount">0</span>)</button>
+    </div>
+  </div>
 </header>
 
-<!-- LISTA DE PRODUTOS -->
-<section id="products"></section>
+<main class="wrap">
+  <section id="hero">
+    <h2>Produtos</h2>
+    <p>Escolha seus arquivos para imprimir</p>
+  </section>
 
-<!-- CARRINHO -->
-<section id="cartModal" class="modal hidden">
-  <div class="modal-content">
-    <h2>Seu Carrinho</h2>
+  <section id="products" class="grid"></section>
+</main>
+
+<div id="cartModal" class="modal hidden">
+  <div class="modal-card">
+    <h3>Seu Carrinho</h3>
     <div id="cartItems"></div>
-    <button id="checkoutBtn">Finalizar Compra</button>
-    <button onclick="closeCart()">Fechar</button>
+    <p>Total: R$ <span id="cartTotal">0.00</span></p>
+    <input id="buyerName" placeholder="Seu nome">
+    <input id="buyerEmail" placeholder="Seu e-mail">
+    <button id="checkoutBtn">Pagar com Mercado Pago</button>
+    <button id="closeCart">Fechar</button>
   </div>
-</section>
+</div>
 
 <script>
-const API = "https://script.google.com/macros/s/AKfycbwFKC14a8-dcPHCEx_zZM-9jMafnDA5Km1FeQTJfBZbmOjuTLl4M2uQRdDLp1XiYxlcAg/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbw4M6unR9TR4nvOd0rGkt0j7weIlVXd9C-6VB648LcNv-_PHUM6H-YWpKXl7EpYlT4Pbw/exec"; // ex: https://script.google.com/macros/s/xxxx/exec
 </script>
-
 <script src="app.js"></script>
-
 </body>
 </html>
