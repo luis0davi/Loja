@@ -1,39 +1,76 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Minha Loja Digital</title>
-<link rel="stylesheet" href="style.css">
+
+<style>
+  body {
+    font-family: Arial;
+    padding: 20px;
+    background: #fafafa;
+  }
+  h1 { text-align: center; }
+
+  .produto {
+    padding: 15px;
+    background: white;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 0 8px #ccc;
+  }
+
+  img {
+    width: 120px;
+    border-radius: 8px;
+  }
+
+  button {
+    margin-top: 10px;
+    padding: 10px;
+    background: #008cff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+</style>
 </head>
 
 <body>
-
-<header>
   <h1>Minha Loja Digital</h1>
-  <nav>
-    <span id="cartBtn">🛒 Carrinho (<span id="cartCount">0</span>)</span>
-  </nav>
-</header>
+  <h3>🛒 Carrinho (<span id="qtd">0</span>)</h3>
 
-<!-- LISTA DE PRODUTOS -->
-<section id="products"></section>
-
-<!-- CARRINHO -->
-<section id="cartModal" class="modal hidden">
-  <div class="modal-content">
-    <h2>Seu Carrinho</h2>
-    <div id="cartItems"></div>
-    <button id="checkoutBtn">Finalizar Compra</button>
-    <button onclick="closeCart()">Fechar</button>
-  </div>
-</section>
+  <div id="lista"></div>
 
 <script>
-const API = "https://script.google.com/macros/s/AKfycbzHStJeoDMEL2A1IegiNuWtg8PAPhFc6k8aYyR9Kju2tJFtdStiCUxfTDa8lUp2SR7h5g/exec";
-</script>
+google.script.run.withSuccessHandler(mostrarProdutos).produtosAPI();
 
-<script src="app.js"></script>
+function mostrarProdutos(produtos) {
+  let html = "";
+
+  produtos.forEach(p => {
+    html += `
+      <div class="produto">
+        <img src="${p.imagem}">
+        <h3>${p.nome}</h3>
+        <p>${p.descricao}</p>
+        <p><b>R$ ${p.preco}</b></p>
+        <button onclick="addCarrinho('${p.nome}')">Adicionar ao carrinho</button>
+      </div>
+    `;
+  });
+
+  document.getElementById("lista").innerHTML = html;
+}
+
+let qtd = 0;
+function addCarrinho() {
+  qtd++;
+  document.getElementById("qtd").innerHTML = qtd;
+}
+</script>
 
 </body>
 </html>
