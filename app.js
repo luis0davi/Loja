@@ -1,5 +1,5 @@
 // URL do seu Apps Script Web App
-const API_URL = "SUA_WEB_APP_URL_AQUI";
+const API_URL = "https://script.google.com/macros/s/AKfycbyjO_HtdJiUU1g9M0BLd8FUGKiTq9Yl74HJUtbSf91aXE1dGDvwOSlP4Vp17F0omYgs1g/exec";
 
 // carregar produtos do sheets
 async function loadProducts() {
