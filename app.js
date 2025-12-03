@@ -2,10 +2,10 @@
 const productsContainer = document.getElementById('products');
 let cart = JSON.parse(localStorage.getItem('cart_v1') || '[]');
 document.getElementById('cartCount').innerText = cart.length;
-API_URL = "https://script.google.com/macros/s/AKfycbyX7lB_L1L4l2u3-xoWmyWD8pgilqcGgh2ma1sJ3VwErU9DFBe9PYV2JXUDYatRQ_BJ/exec";
+
 async function fetchProducts(){
   try{
-    const res = await fetch(API_URL + '?action=getProducts');
+    const res = await fetch("https://script.google.com/macros/s/AKfycbxEy5rLjZRaLuAkC7HY0nR5Hz5pLAnqr6ZfuBwCm1wC-WhwBBNCLKW521PhJzbrJ82gpw/exec" + '?action=getProducts');
     const data = await res.json();
     return data;
   }catch(err){
@@ -87,7 +87,7 @@ document.getElementById('checkoutBtn').addEventListener('click', async ()=>{
 
   const payload = { name, email, cart };
   try{
-    const resp = await fetch(API_URL + '?action=createOrder', { method:'POST', body: JSON.stringify(payload) });
+    const resp = await fetch("https://script.google.com/macros/s/AKfycbxEy5rLjZRaLuAkC7HY0nR5Hz5pLAnqr6ZfuBwCm1wC-WhwBBNCLKW521PhJzbrJ82gpw/exec" + '?action=createOrder', { method:'POST', body: JSON.stringify(payload) });
     const data = await resp.json();
     if(data && data.init_point){
       // redirect to MP checkout
