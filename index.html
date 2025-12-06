@@ -1,45 +1,304 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Loja — TioEdy-like</title>
-<link rel="stylesheet" href="style.css">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>TIA CECILIA — Loja Digital</title>
+<!-- Adicionando a SDK do Mercado Pago -->
+<script src="sdk.mercadopago.com"></script>
+<style>
+/* ====== Reset e básico (CSS mantido do original) ====== */
+:root{--primary:#F9E6E0;--accent:#FFB6B6;--text:#333;--muted:#666} *{box-sizing:border-box} body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin:0; color:var(--text); background:#fff} header{background:linear-gradient(180deg,var(--primary),#fff);padding:18px 20px;border-bottom:1px solid #eee;display:flex;align-items:center;justify-content:space-between} .brand{display:flex;align-items:center;gap:12px} .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#fff,rgba(255,255,255,0.3));display:flex;align-items:center;justify-content:center;font-weight:700;color:#b33} h1{font-size:20px;margin:0} .subtitle{font-size:13px;color:var(--muted)} main{padding:20px;max-width:1200px;margin:0 auto} .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px} .card{border:1px solid #f0e6e6;border-radius:12px;padding:14px;background:#fff;box-shadow:0 6px 18px rgba(200,150,150,0.03)} .cover{width:100%;height:220px;border-radius:8px;background-size:cover;background-position:center;margin-bottom:12px} .title{font-weight:700;margin:6px 0} .price{font-weight:800;color:#b23;margin:6px 0} .meta{font-size:13px;color:var(--muted)} .btn{display:inline-block;padding:8px 12px;border-radius:8px;background:var(--accent);color:#6b0000;font-weight:700;border:none;cursor:pointer} .btn.secondary{background:#fff;border:1px solid #ffdede;color:#b23} footer{padding:18px;text-align:center;color:var(--muted)} /* Carrinho botão */ .cart-btn{position:relative} .cart-count{position:absolute;right:-8px;top:-8px;background:#b23;color:#fff;width:22px;height:22px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:12px} /* Modal do carrinho */ .modal{position:fixed;right:20px;bottom:20px;width:380px;background:#fff;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.12);padding:16px;display:none;z-index:50} .modal.open{display:block} .cart-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px dashed #eee} .cart-item img{width:64px;height:64px;border-radius:8px;object-fit:cover} .qty{display:flex;gap:6px;align-items:center} .small{font-size:13px;color:var(--muted)} .checkout-actions{display:flex;gap:8px;margin-top:12px} /* Responsive */ @media(max-width:600px){.modal{right:10px;left:10px;width:auto}} /* Informações extras */ .notice{background:#fff3f3;border-left:4px solid #ffdede;padding:10px;border-radius:8px;margin-bottom:12px} .admin-link{font-size:13px;color:var(--muted);text-decoration:underline;cursor:pointer}
+/* Novo CSS para o botão do MP */
+#mp-button-container { width: 100%; }
+#checkoutPix { flex-grow: 1; }
+</style>
 </head>
 <body>
-<header class="site-header">
-  <div class="wrap">
-    <h1 class="brand">TioEdy Style — Minha Loja</h1>
-    <div class="actions">
-      <button id="openCartBtn">🛒 Carrinho (<span id="cartCount">0</span>)</button>
-    </div>
-  </div>
-</header>
-
-<main class="wrap">
-  <section id="hero">
-    <h2>Produtos</h2>
-    <p>Escolha seus arquivos para imprimir</p>
-  </section>
-
-  <section id="products" class="grid"></section>
-</main>
-
-<div id="cartModal" class="modal hidden">
-  <div class="modal-card">
-    <h3>Seu Carrinho</h3>
-    <div id="cartItems"></div>
-    <p>Total: R$ <span id="cartTotal">0.00</span></p>
-    <input id="buyerName" placeholder="Seu nome">
-    <input id="buyerEmail" placeholder="Seu e-mail">
-    <button id="checkoutBtn">Pagar com Mercado Pago</button>
-    <button id="closeCart">Fechar</button>
-  </div>
+<header>
+<div class="brand">
+<div class="logo">TC</div>
+<div>
+<h1>TIA CECILIA — Loja Digital</h1>
+<div class="subtitle">Recursos pedagógicos e planilhas — PDFs & Excel</div>
 </div>
-
+</div>
+<div style="display:flex;gap:12px;align-items:center">
+<div class="notice" style="padding:8px;border-radius:8px">Estilo: Infantil • Produtos iniciais adicionados</div>
+<button id="openCart" class="btn cart-btn">Carrinho <span id="cartCount" class="cart-count">0</span></button>
+</div>
+</header>
+<main>
+<section style="margin-bottom:18px">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<h2 style="margin:0">Produtos</h2>
+<div class="small">Exemplo com 4 produtos iniciais — use o botão Adicionar no Carrinho</div>
+</div>
+</section>
+<section class="grid" id="productGrid">
+<!-- Produtos serão carregados por JS -->
+</section>
+<section style="margin-top:20px">
+<p class="small">Dica: você pode editar o array <code>PRODUCTS</code> no final do arquivo para ajustar preços, títulos e links de download (use os arquivos que eu gerei: <code>tia_cecilia_produtos.zip</code>).</p>
+<p class="small" style="color:red; font-weight:bold;">IMPORTANTE: Edite a variável `MERCADO_PAGO_PUBLIC_KEY` no script para a integração funcionar.</p>
+</section>
+</main>
+<!-- Modal do Carrinho -->
+<div id="cartModal" class="modal" aria-hidden="true">
+<h3 style="margin:0 0 8px 0">Seu Carrinho</h3>
+<div id="cartItems"></div>
+<div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center">
+<strong>Total:</strong>
+<strong id="cartTotal">R$ 0,00</strong>
+</div>
+<div class="checkout-actions">
+<!-- Contêiner para o botão do Mercado Pago (será injetado via JS) -->
+<div id="mp-button-container"></div>
+<button id="checkoutPix" class="btn secondary">Pagar com PIX (Payload)</button>
+</div>
+<div style="margin-top:10px;display:flex;justify-content:space-between">
+<button id="closeCart" class="btn secondary">Fechar</button>
+<button id="clearCart" class="btn secondary">Esvaziar</button>
+</div>
+<!-- Pix modal interno -->
+<div id="pixBox" style="display:none;margin-top:12px;padding:10px;border:1px dashed #eee;border-radius:8px">
+<p class="small">Copie o payload PIX abaixo e cole no seu app bancário ou gere QR com ele.</p>
+<textarea id="pixPayload" style="width:100%;height:88px;font-size:13px">00020126360014BR.GOV.BCB.PIX0136+5584999999995204000053039865408.005802BR5925TIA CECILIA6009FORTALEZA61080540900062070503***6304FFFF</textarea>
+<div style="display:flex;gap:8px;margin-top:6px">
+<button id="copyPix" class="btn">Copiar PIX</button>
+<button id="closePix" class="btn secondary">Fechar PIX</button>
+</div>
+</div>
+</div>
+<footer>
+<small>Feito com ❤️ para TIA CECILIA — entregue como site estático (pronto para GitHub Pages)</small>
+</footer>
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbxUPobO_hiUJXcHbbAxb0VKhINBIfYURAwlFXpcFWyA3Y2rToiSsK2Ojrb5jOGpvNr8cA/exec"; // ex: https://script.google.com/macros/s/xxxx/exec
+/* ====== Configuração Mercado Pago (MUITO IMPORTANTE!) ====== */
+// Substitua pela sua Public Key do Mercado Pago (ela começa com 'APP_USR-' ou 'TEST-')
+const MERCADO_PAGO_PUBLIC_KEY = 'SUA_PUBLIC_KEY_AQUI'; 
+
+/* ====== Dados dos produtos (edite aqui) ====== */
+const PRODUCTS = [
+{ id: 'pack-alfabetizacao', title: 'Pack Alfabetização — Amostra', price: 12.00, description: 'PDF amostra com atividades iniciais (9 páginas).', cover: 'sandbox:/mnt/data/tia_cecilia_produtos/pack_alfabetizacao/cover_pack_alfabetizacao.png', file: 'sandbox:/mnt/data/tia_cecilia_produtos/pack_alfabetizacao/pack_alfabetizacao_amostra.pdf' },
+{ id: 'planner-2025', title: 'Planner Professor 2025', price: 12.00, description: 'Planner anual para organização do ano letivo.', cover: 'sandbox:/mnt/data/tia_cecilia_produtos/planner_professor_2025/cover_planner_2025.png', file: 'sandbox:/mnt/data/tia_cecilia_produtos/planner_professor_2025/planner_professor_2025.pdf' },
+{ id: 'ativ-infantil', title: 'Atividades Educação Infantil', price: 10.00, description: 'Jogos e fichas para crianças de 3 a 6 anos (amostra).', cover: 'sandbox:/mnt/data/atividades_educacao_infantil/cover_atividades_infantil.png', file: 'sandbox:/mnt/data/atividades_educacao_infantil/atividades_educacao_infantil.pdf' },
+{ id: 'planilha-fin', title: 'Planilha Financeira Pessoal', price: 20.00, description: 'Excel com entradas, saídas, metas e resumo automático.', cover: 'sandbox:/mnt/data/planilha_fin.xlsx', file: 'sandbox:/mnt/data/planilha_fin.xlsx' }
+];
+
+/* ====== Helpers ====== */
+const money = v => v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const getProductById = id => PRODUCTS.find(p => p.id === id);
+
+/* ====== Render produtos ====== */
+const grid = document.getElementById('productGrid');
+PRODUCTS.forEach(p => {
+const card = document.createElement('article');
+card.className = 'card';
+card.innerHTML = `
+<div class="cover" style="background-image:url('${p.cover}')"></div>
+<div class="title">${p.title}</div>
+<div class="meta">${p.description}</div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+<div>
+<div class="price">${money(p.price)}</div>
+<div class="small">Download digital — entrega imediata</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<button class="btn add-to-cart" data-id="${p.id}">Adicionar no carrinho</button>
+<a class="btn secondary" href="${p.file}" target="_blank" rel="noopener">Visualizar</a>
+</div>
+</div>
+`;
+grid.appendChild(card);
+});
+
+/* ====== Carrinho (LocalStorage) ====== */
+const CART_KEY = 'tia_cecilia_cart_v1';
+let cart = JSON.parse(localStorage.getItem(CART_KEY) || '{}');
+const cartCountEl = document.getElementById('cartCount');
+const cartItemsEl = document.getElementById('cartItems');
+const cartTotalEl = document.getElementById('cartTotal');
+const mpButtonContainer = document.getElementById('mp-button-container');
+
+function saveCart(){
+localStorage.setItem(CART_KEY, JSON.stringify(cart));
+updateCartUI();
+}
+
+function addToCart(productId, qty=1){
+cart[productId] = (cart[productId] || 0) + qty;
+saveCart();
+}
+
+function updateCartUI(){
+let count = 0;
+let total = 0;
+cartItemsEl.innerHTML = '';
+for(const id in cart){
+if(cart[id] > 0){
+count += cart[id];
+const product = getProductById(id);
+if(product){
+total += product.price * cart[id];
+const itemEl = document.createElement('div');
+itemEl.className = 'cart-item';
+itemEl.innerHTML = `
+<img src="${product.cover}" alt="${product.title}">
+<div style="flex-grow:1">
+<div class="title" style="margin:0">${product.title}</div>
+<div class="price" style="margin:0">${money(product.price)} un.</div>
+<div class="qty small">
+<button class="small decrease-qty" data-id="${id}">-</button>
+<span>${cart[id]}</span>
+<button class="small increase-qty" data-id="${id}">+</button>
+</div>
+</div>
+`;
+cartItemsEl.appendChild(itemEl);
+}
+}
+}
+cartCountEl.textContent = count;
+cartTotalEl.textContent = money(total);
+renderMercadoPagoButton(total); // Renderiza/atualiza o botão do MP
+}
+
+function clearCart(){
+cart = {};
+saveCart();
+}
+
+// Lógica de aumentar/diminuir quantidade no carrinho
+cartItemsEl.addEventListener('click', (e) => {
+if(e.target.classList.contains('increase-qty')){
+addToCart(e.target.dataset.id, 1);
+} else if (e.target.classList.contains('decrease-qty')){
+const id = e.target.dataset.id;
+cart[id] -= 1;
+if(cart[id] <= 0){
+delete cart[id];
+}
+saveCart();
+}
+});
+
+/* ====== Lógica Mercado Pago (Novo) ====== */
+
+// 1. Inicializa o Mercado Pago SDK
+const mp = new MercadoPago(MERCADO_PAGO_PUBLIC_KEY, {
+locale: 'pt-BR'
+});
+
+// Esta é uma função mock (simulada) para criar a preferência.
+// Em um ambiente real, VOCÊ PRECISARIA DE UM BACKEND para chamar a API do MP com seu Access Token seguro.
+// Para este exemplo estático, usamos um endpoint de teste/simulação.
+async function createCheckoutPreference(cartItems) {
+// Mock response structure as if the backend generated a preference ID
+return new Promise((resolve) => {
+console.log("Simulando a criação de preferência para:", cartItems);
+// Em um cenário real, você faria um fetch() para seu backend aqui.
+// fetch('SEU_BACKEND/create_preference', { method: 'POST', body: JSON.stringify({ items: cartItems })})
+
+// Usamos um ID de teste para demonstração no frontend estático:
+// Este ID de teste direciona para uma página de checkout do MP de teste.
+resolve({ preferenceId: '123456789-abcdefghijk-lmnopqrstuvwx' }); 
+});
+}
+
+async function renderMercadoPagoButton(totalAmount) {
+// Remove o botão anterior se existir
+mpButtonContainer.innerHTML = ''; 
+
+if (totalAmount <= 0) return;
+
+const itemsForMP = Object.keys(cart).map(id => {
+const product = getProductById(id);
+return {
+id: id,
+title: product.title,
+description: product.description,
+quantity: cart[id],
+currency_id: 'BRL',
+unit_price: product.price,
+};
+});
+
+try {
+// Simula a criação da preferência de pagamento (veja a função acima)
+const preference = await createCheckoutPreference(itemsForMP);
+const preferenceId = preference.preferenceId;
+
+// 2. Renderiza o Brick de Botão customizado
+const bricksBuilder = mp.bricks();
+
+const renderButton = async (bricksBuilder) => {
+const settings = {
+initialization: {
+preferenceId: preferenceId,
+},
+callbacks: {
+onReady: () => {
+console.log('Botão do MP pronto para interação.');
+},
+onClick: () => {
+// Lógica extra antes de ir para o checkout, se necessário
+console.log('Usuário clicou no botão do MP');
+},
+onError: (error) => {
+console.error(error);
+alert('Ocorreu um erro ao processar o pagamento com Mercado Pago.');
+},
+},
+label: 'Pagar com Mercado Pago',
+};
+window.checkoutButton = await bricksBuilder.create('customizableButton', 'mp-button-container', settings);
+}
+
+renderButton(bricksBuilder);
+
+} catch (error) {
+console.error("Erro ao integrar MP:", error);
+mpButtonContainer.innerHTML = '<p style="color:red; font-size:12px">Erro ao carregar pagamento MP. Verifique sua Public Key.</p>';
+}
+}
+
+
+/* ====== Modal & Event Listeners UI ====== */
+const cartModal = document.getElementById('cartModal');
+document.getElementById('openCart').addEventListener('click', () => {
+cartModal.classList.add('open');
+});
+document.getElementById('closeCart').addEventListener('click', () => {
+cartModal.classList.remove('open');
+});
+document.getElementById('clearCart').addEventListener('click', clearCart);
+
+// PIX Actions (Mantido)
+const pixBox = document.getElementById('pixBox');
+document.getElementById('checkoutPix').addEventListener('click', () => {
+pixBox.style.display = 'block';
+});
+document.getElementById('closePix').addEventListener('click', () => {
+pixBox.style.display = 'none';
+});
+document.getElementById('copyPix').addEventListener('click', () => {
+const pixPayloadEl = document.getElementById('pixPayload');
+pixPayloadEl.select();
+document.execCommand('copy');
+alert('Payload PIX copiado para a área de transferência!');
+});
+
+
+// Event listeners para adicionar produtos ao carrinho
+grid.addEventListener('click', (e) => {
+if(e.target.classList.contains('add-to-cart')){
+addToCart(e.target.dataset.id);
+}
+});
+
+// Inicialização
+updateCartUI(); // Atualiza a UI e tenta renderizar o botão MP na carga inicial
 </script>
-<script src="app.js"></script>
 </body>
 </html>
