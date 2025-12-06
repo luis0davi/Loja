@@ -9,7 +9,7 @@ async function gerarPagamento() {
   const carrinho = JSON.parse(localStorage.getItem("carrinho"));
 
   let res = await fetch(
-    "https://script.google.com/macros/s/SEU_WEBAPP_ID/exec",
+    "https://script.google.com/macros/s/AKfycbzauFfztDTkg419J_UouubQXh0_w0VfS84CiMQbDb-obj7cO-iGfTLHYvUvXvfmOpfxEA/exec",
     {
       method: "POST",
       body: JSON.stringify({
