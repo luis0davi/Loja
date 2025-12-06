@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Checkout</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>💳 Finalizar Compra</h1>
+
+<label>E-mail para envio:</label>
+<input id="email" type="email" placeholder="seuemail@gmail.com">
+
+<button onclick="gerarPagamento()">Pagar</button>
+
+<div id="wallet_container"></div>
+
+<script src="https://sdk.mercadopago.com/js/v2"></script>
+<script src="js/carrinho.js"></script>
+<script src="js/mercadopago.js"></script>
+
+</body>
+</html>
