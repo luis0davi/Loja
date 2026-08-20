@@ -14,7 +14,7 @@ const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 // ==========================================================================
 const DEFAULT_USERS = [
     { username: "admin", password: "thermolink2026", name: "Administrador ThermoLink", role: "admin" },
-    { username: "ceramica", password: "forno2026", name: "Cerâmica São José", role: "client" },
+    { username: "ceramica", password: "forno2026", name: "Cerâmica Nossa Senhora Aparecida", role: "client" },
     { username: "demo", password: "123456", name: "Cerâmica Modelo Demo", role: "client" }
 ];
 
@@ -324,7 +324,7 @@ function renderListaFornos() {
                     <div class="oven-card-temp-box">
                         <span class="temp-c1-tag">Canal 1 (Superior)</span>
                         <div class="temp-c1-big">
-                            ${c1Val !== null ? c1Val.toFixed(1) : "--"}<span class="unit">°C</span>
+                            ${c1Val !== null ? Math.round(c1Val) : "--"}<span class="unit">°C</span>
                         </div>
                     </div>
                     <div class="sparkline-container">
@@ -333,7 +333,7 @@ function renderListaFornos() {
                 </div>
 
                 <div class="oven-card-foot">
-                    <span>Canal 2 (Inferior): <b class="foot-c2-val">${c2Val !== null ? c2Val.toFixed(1) + " °C" : "--"}</b></span>
+                    <span>Canal 2 (Inferior): <b class="foot-c2-val">${c2Val !== null ? Math.round(c2Val) + " °C" : "--"}</b></span>
                     <span class="foot-time-val"><i class="fa-regular fa-clock"></i> ${relTime}</span>
                 </div>
             </article>
@@ -397,7 +397,6 @@ async function abrirDetalheForno(modulo) {
 
     $("screenFornos").classList.add("hidden");
     $("screenHistorico").classList.add("hidden");
-    $("screenAlertas").classList.add("hidden");
     $("screenConfig").classList.add("hidden");
     $("screenFornoDetalhe").classList.remove("hidden");
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -429,20 +428,20 @@ async function atualizarFornoDetalhe(modulo) {
     const c2 = numVal(reading?.canal_2);
 
     // Mostrador no Forno 3D
-    $("gaugeMainTemp").textContent = c1 !== null ? `${c1.toFixed(1)} °C` : "-- °C";
-    $("gaugeC2Sub").textContent = c2 !== null ? `${c2.toFixed(1)} °C` : "-- °C";
+    $("gaugeMainTemp").textContent = c1 !== null ? `${Math.round(c1)} °C` : "-- °C";
+    $("gaugeC2Sub").textContent = c2 !== null ? `${Math.round(c2)} °C` : "-- °C";
     $("gaugeLastTime").textContent = formatHora(reading?.created_at);
 
     if (c1 !== null && c2 !== null) {
         const delta = Math.abs(c1 - c2);
-        $("gaugeDeltaT").textContent = `${delta.toFixed(1)} °C`;
+        $("gaugeDeltaT").textContent = `${Math.round(delta)} °C`;
     } else {
         $("gaugeDeltaT").textContent = "-- °C";
     }
 
     // Cards de Sensores
-    $("cardValC1").textContent = c1 !== null ? `${c1.toFixed(1)} °C` : "-- °C";
-    $("cardValC2").textContent = c2 !== null ? `${c2.toFixed(1)} °C` : "-- °C";
+    $("cardValC1").textContent = c1 !== null ? `${Math.round(c1)} °C` : "-- °C";
+    $("cardValC2").textContent = c2 !== null ? `${Math.round(c2)} °C` : "-- °C";
 
     // Histórico detalhado
     const rows = await getHistoricoModulo(modulo, 60);
@@ -489,16 +488,16 @@ function atualizarEstatisticasQueima(rows) {
         const min1 = Math.min(...c1Vals);
         const avg1 = c1Vals.reduce((a, b) => a + b, 0) / c1Vals.length;
 
-        $("subStatC1Max").textContent = `${max1.toFixed(1)}°C`;
-        $("subStatC1Min").textContent = `${min1.toFixed(1)}°C`;
-        $("quadMax").textContent = `${max1.toFixed(1)} °C`;
-        $("quadMin").textContent = `${min1.toFixed(1)} °C`;
-        $("quadAvg").textContent = `${avg1.toFixed(1)} °C`;
+        $("subStatC1Max").textContent = `${Math.round(max1)}°C`;
+        $("subStatC1Min").textContent = `${Math.round(min1)}°C`;
+        $("quadMax").textContent = `${Math.round(max1)} °C`;
+        $("quadMin").textContent = `${Math.round(min1)} °C`;
+        $("quadAvg").textContent = `${Math.round(avg1)} °C`;
     }
 
     if (c2Vals.length) {
-        $("subStatC2Max").textContent = `${Math.max(...c2Vals).toFixed(1)}°C`;
-        $("subStatC2Min").textContent = `${Math.min(...c2Vals).toFixed(1)}°C`;
+        $("subStatC2Max").textContent = `${Math.round(Math.max(...c2Vals))}°C`;
+        $("subStatC2Min").textContent = `${Math.round(Math.min(...c2Vals))}°C`;
     }
 
     $("quadCount").textContent = `${rows.length} leituras`;
@@ -516,13 +515,13 @@ function renderTabelaLeituras(rows) {
     tbody.innerHTML = ultimos.map(r => {
         const c1 = numVal(r.canal_1);
         const c2 = numVal(r.canal_2);
-        const delta = (c1 !== null && c2 !== null) ? `${Math.abs(c1 - c2).toFixed(1)} °C` : "--";
+        const delta = (c1 !== null && c2 !== null) ? `${Math.round(Math.abs(c1 - c2))} °C` : "--";
 
         return `
             <tr>
                 <td><b>${formatHora(r.created_at)}</b></td>
-                <td class="text-orange"><b>${c1 !== null ? c1.toFixed(1) + " °C" : "--"}</b></td>
-                <td class="text-blue"><b>${c2 !== null ? c2.toFixed(1) + " °C" : "--"}</b></td>
+                <td class="text-orange"><b>${c1 !== null ? Math.round(c1) + " °C" : "--"}</b></td>
+                <td class="text-blue"><b>${c2 !== null ? Math.round(c2) + " °C" : "--"}</b></td>
                 <td>${delta}</td>
             </tr>
         `;
@@ -744,9 +743,9 @@ function atualizarPainelAnalise(rows) {
         const min = Math.min(...c1Vals);
         const avg = c1Vals.reduce((a, b) => a + b, 0) / c1Vals.length;
 
-        $("anStatMax").textContent = `${max.toFixed(1)} °C`;
-        $("anStatMin").textContent = `${min.toFixed(1)} °C`;
-        $("anStatAvg").textContent = `${avg.toFixed(1)} °C`;
+        $("anStatMax").textContent = `${Math.round(max)} °C`;
+        $("anStatMin").textContent = `${Math.round(min)} °C`;
+        $("anStatAvg").textContent = `${Math.round(avg)} °C`;
         $("anStatCount").textContent = `${rows.length} leituras`;
         $("anChartSub").textContent = `Curva detalhada de ${rows.length} leituras`;
     }
@@ -762,21 +761,43 @@ function renderTabelaAnalise(rows) {
         return;
     }
 
+    // Calcula pico máximo e mínimo do canal 1 (temperatura principal)
+    const c1Vals = rows.map(r => numVal(r.canal_1)).filter(v => v !== null);
+    const globalMax = c1Vals.length ? Math.max(...c1Vals) : null;
+    const globalMin = c1Vals.length ? Math.min(...c1Vals) : null;
+
+    // Índices das primeiras ocorrências de máx e mín
+    const idxMax = globalMax !== null ? rows.findIndex(r => numVal(r.canal_1) === globalMax) : -1;
+    const idxMin = globalMin !== null ? rows.findIndex(r => numVal(r.canal_1) === globalMin) : -1;
+
     let exibicao = [...rows].reverse();
+    const totalRows = rows.length;
+
+    // Converte índices do array original (não invertido) para o invertido
+    const idxMaxInv = idxMax !== -1 ? totalRows - 1 - idxMax : -1;
+    const idxMinInv = idxMin !== -1 ? totalRows - 1 - idxMin : -1;
+
     if (state.analysisTableRowLimit !== "all") {
         exibicao = exibicao.slice(0, state.analysisTableRowLimit);
     }
 
-    tbody.innerHTML = exibicao.map(r => {
+    tbody.innerHTML = exibicao.map((r, i) => {
         const c1 = numVal(r.canal_1);
         const c2 = numVal(r.canal_2);
-        const delta = (c1 !== null && c2 !== null) ? `${Math.abs(c1 - c2).toFixed(1)} °C` : "--";
+        const delta = (c1 !== null && c2 !== null) ? `${Math.round(Math.abs(c1 - c2))} °C` : "--";
+
+        const isMax = (i === idxMaxInv);
+        const isMin = (i === idxMinInv);
+
+        const rowClass = isMax ? "row-peak-max" : (isMin ? "row-peak-min" : "");
+        const badgeMax = isMax ? `<span class="peak-badge peak-badge-max"><i class="fa-solid fa-arrow-up"></i> MÁX</span>` : "";
+        const badgeMin = isMin ? `<span class="peak-badge peak-badge-min"><i class="fa-solid fa-arrow-down"></i> MÍN</span>` : "";
 
         return `
-            <tr>
-                <td><b>${formatHora(r.created_at)}</b></td>
-                <td class="text-orange"><b>${c1 !== null ? c1.toFixed(1) + " °C" : "--"}</b></td>
-                <td class="text-blue"><b>${c2 !== null ? c2.toFixed(1) + " °C" : "--"}</b></td>
+            <tr class="${rowClass}">
+                <td><b>${formatHora(r.created_at)}</b>${badgeMax}${badgeMin}</td>
+                <td class="text-orange"><b>${c1 !== null ? Math.round(c1) + " °C" : "--"}</b></td>
+                <td class="text-blue"><b>${c2 !== null ? Math.round(c2) + " °C" : "--"}</b></td>
                 <td>${delta}</td>
             </tr>
         `;
@@ -892,7 +913,6 @@ function navegarAba(aba) {
     $("screenFornos").classList.add("hidden");
     $("screenFornoDetalhe").classList.add("hidden");
     $("screenHistorico").classList.add("hidden");
-    $("screenAlertas").classList.add("hidden");
     $("screenConfig").classList.add("hidden");
 
     // Desativa botões da bottom nav
@@ -906,10 +926,6 @@ function navegarAba(aba) {
         $("tabNavHistorico").classList.add("active");
         $("screenHistorico").classList.remove("hidden");
         carregarDadosAnalise();
-    } else if (aba === "alertas") {
-        $("tabNavAlertas").classList.add("active");
-        $("screenAlertas").classList.remove("hidden");
-        $("alertSyncTime").textContent = `Atualizado às ${new Date().toLocaleTimeString("pt-BR")}`;
     } else if (aba === "config") {
         $("tabNavConfig").classList.add("active");
         $("screenConfig").classList.remove("hidden");

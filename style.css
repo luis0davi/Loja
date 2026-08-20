@@ -796,23 +796,24 @@ button {
     position: relative;
     width: 100%;
     max-width: 320px;
-    height: 270px;
+    height: 280px;
     margin: 4px 0;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 16px;
     overflow: hidden;
-    background: radial-gradient(circle at 50% 50%, rgba(244, 123, 32, 0.15) 0%, rgba(7, 27, 43, 0.6) 80%);
-    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);
+    background: #ffffff;
 }
 
 .kiln-3d-image {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center center;
     border-radius: 16px;
-    filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.4));
+    mix-blend-mode: multiply;
+    filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.45)) saturate(1.2) brightness(1.05);
     transition: transform 0.3s ease;
 }
 
@@ -1286,6 +1287,72 @@ button {
     color: var(--text-muted);
 }
 
+/* MARCADORES DE PICO MÁXIMO E MÍNIMO NA TABELA DE ANÁLISE */
+.row-peak-max {
+    background: rgba(244, 123, 32, 0.08) !important;
+    position: relative;
+}
+
+.row-peak-max td:first-child::before {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--orange);
+    border-radius: 0 2px 2px 0;
+}
+
+.row-peak-min {
+    background: rgba(59, 130, 182, 0.08) !important;
+    position: relative;
+}
+
+.row-peak-min td:first-child::before {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--blue-light);
+    border-radius: 0 2px 2px 0;
+}
+
+.row-peak-max td,
+.row-peak-min td {
+    position: relative;
+}
+
+.peak-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 9px;
+    font-weight: 800;
+    padding: 1px 5px;
+    border-radius: 4px;
+    margin-left: 5px;
+    vertical-align: middle;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.peak-badge-max {
+    background: rgba(244, 123, 32, 0.18);
+    color: var(--orange-light);
+    border: 1px solid rgba(244, 123, 32, 0.35);
+}
+
+.peak-badge-min {
+    background: rgba(59, 130, 182, 0.18);
+    color: var(--blue-light);
+    border: 1px solid rgba(59, 130, 182, 0.35);
+}
+
 /* ==========================================================================
    ALERTAS
    ========================================================================== */
@@ -1424,7 +1491,7 @@ button {
     -webkit-backdrop-filter: blur(18px);
     z-index: 1000;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     padding: 6px 8px env(safe-area-inset-bottom);
 }
 

@@ -15,7 +15,7 @@ const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const DEFAULT_CLIENTS = [
     {
         id: "cli_1",
-        nome: "Cerâmica São José",
+        nome: "Cerâmica Nossa Senhora Aparecida",
         responsavel: "Carlos Eduardo",
         cidade: "Tatuí - SP",
         plano: "Profissional",
@@ -69,7 +69,7 @@ const DEFAULT_DEVICES = [
         modelo: "TLK-ESP32-DUAL",
         status: "Vinculado",
         ceramicaId: "cli_1",
-        ceramicaNome: "Cerâmica São José",
+        ceramicaNome: "Cerâmica Nossa Senhora Aparecida",
         moduloNum: 1,
         dataFabricacao: "02/08/2026",
         rssi: -58,
@@ -83,7 +83,7 @@ const DEFAULT_DEVICES = [
         modelo: "TLK-ESP32-DUAL",
         status: "Vinculado",
         ceramicaId: "cli_1",
-        ceramicaNome: "Cerâmica São José",
+        ceramicaNome: "Cerâmica Nossa Senhora Aparecida",
         moduloNum: 2,
         dataFabricacao: "02/08/2026",
         rssi: -64,

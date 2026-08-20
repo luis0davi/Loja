@@ -61,7 +61,7 @@
                 <div class="login-icon">
                     <i class="fa-solid fa-fire-flame-curved"></i>
                 </div>
-                <h2>Acesso da Cerâmica</h2>
+                <h2>Acesso da Cerâmica Nossa Senhora Aparecida</h2>
                 <p>Insira os dados fornecidos pelo suporte ThermoLink para monitorar seus fornos</p>
             </div>
 
@@ -69,7 +69,7 @@
                 <div class="input-group">
                     <label for="loginUser">
                         <i class="fa-solid fa-industry"></i>
-                        Usuário da Cerâmica
+                        Usuário
                     </label>
                     <input 
                         type="text" 
@@ -138,7 +138,7 @@
         <div id="impersonateBanner" class="impersonate-banner hidden">
             <div class="imp-info">
                 <i class="fa-solid fa-user-shield text-blue"></i>
-                <span><b>Modo Suporte Admin:</b> Visualizando <strong id="impClientName">Cerâmica</strong></span>
+                <span><b>Modo Suporte Admin:</b> Visualizando <strong id="impClientName">Cerâmica Nossa Senhora Aparecida</strong></span>
             </div>
             <button class="btn-imp-exit" onclick="sairModoSuporte()">
                 <i class="fa-solid fa-arrow-left"></i>
@@ -155,7 +155,7 @@
                 <div class="header-brand-info">
                     <div id="headerTitle" class="header-title">ThermoLink</div>
                     <div id="headerSubtitle" class="header-subtitle">
-                        <span class="user-chip" id="currentUserDisplay">Cerâmica</span>
+                        <span class="user-chip" id="currentUserDisplay">Cerâmica Nossa Senhora Aparecida</span>
                     </div>
                 </div>
             </div>
@@ -212,7 +212,7 @@
 
                 <!-- IMAGEM DO FORNO 3D COM OVERLAYS DE TEMPERATURA -->
                 <div class="kiln-3d-visual-container">
-                    <img src="forno_3d.jpg" alt="Forno Cerâmico 3D ThermoLink" class="kiln-3d-image">
+                    <img src="nova imagen de um forno.png" alt="Forno Cerâmico ThermoLink" class="kiln-3d-image">
                     
                     <!-- TAG DO SENSOR SUPERIOR (CANAL 1) -->
                     <div class="sensor-overlay-tag overlay-top">
@@ -521,41 +521,7 @@
 
         </section>
 
-        <!-- ====================================================
-             ABA 3: ALERTAS DO SISTEMA
-        ===================================================== -->
-        <section id="screenAlertas" class="screen-view hidden">
-            <div class="card-dark">
-                <div class="card-dark-header">
-                    <i class="fa-solid fa-bell text-orange"></i>
-                    <span>Central de Notificações e Alertas</span>
-                </div>
-
-                <div class="alerts-list" id="alertsListContainer">
-                    <div class="alert-item alert-success">
-                        <div class="alert-item-icon">
-                            <i class="fa-solid fa-circle-check"></i>
-                        </div>
-                        <div class="alert-item-body">
-                            <div class="alert-item-title">Telemetria Ativa</div>
-                            <div class="alert-item-text">Os aparelhos ThermoLink estão sincronizados e enviando leituras.</div>
-                            <div class="alert-item-time" id="alertSyncTime">Agora mesmo</div>
-                        </div>
-                    </div>
-
-                    <div class="alert-item alert-info">
-                        <div class="alert-item-icon">
-                            <i class="fa-solid fa-shield-halved"></i>
-                        </div>
-                        <div class="alert-item-body">
-                            <div class="alert-item-title">Faixa Operacional Segura</div>
-                            <div class="alert-item-text">Monitoramento de gradiente térmico entre termopar superior e inferior ativado.</div>
-                            <div class="alert-item-time">Sistema ThermoLink</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <!-- Aba Alertas removida -->
 
         <!-- ====================================================
              ABA 4: CONFIGURAÇÕES & ACESSO
@@ -568,7 +534,7 @@
                     <i class="fa-solid fa-industry"></i>
                 </div>
                 <div class="profile-meta">
-                    <h3 id="profileName">Cerâmica Cliente</h3>
+                    <h3 id="profileName">Nossa Senhora Aparecida</h3>
                     <span class="profile-badge" id="profileRole">Acesso Concedido</span>
                 </div>
             </div>
@@ -611,10 +577,6 @@
             <button class="tab-item" id="tabNavHistorico" onclick="navegarAba('historico')">
                 <i class="fa-solid fa-chart-line"></i>
                 <span>Análise</span>
-            </button>
-            <button class="tab-item" id="tabNavAlertas" onclick="navegarAba('alertas')">
-                <i class="fa-solid fa-bell"></i>
-                <span>Alertas</span>
             </button>
             <button class="tab-item" id="tabNavConfig" onclick="navegarAba('config')">
                 <i class="fa-solid fa-gear"></i>
