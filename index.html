@@ -1,138 +1,422 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ThermoLink - Monitoramento Industrial</title>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"
+    >
+
+    <meta name="theme-color" content="#071b2b">
+
+    <title>ThermoLink</title>
+
     <link rel="stylesheet" href="style.css">
-    <!-- Dependências oficiais via CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
 </head>
+
 <body>
 
-    <div class="app">
-        
-        <!-- BARRA SUPERIOR DE STATUS -->
-        <header class="topbar">
-            <div class="logo-container">
-                <div class="logo">THERMOLINK</div>
-                <div class="subtitle">Controle em Tempo Real</div>
-            </div>
-            <div class="online-pill">
-                <span></span>
-                <div id="onlineCount">0 online</div>
-            </div>
-        </header>
+<!-- ========================================================
+     SPLASH
+========================================================= -->
 
-        <main>
-            
-            <!-- SEÇÃO DE COMPONENTE: PAINEL HOME (GRID) -->
-            <section id="homeView">
-                <div class="page-title">
-                    <h1>Módulos Ativos</h1>
-                    <span>Histórico Ativo</span>
-                </div>
-                <div id="ovenGrid" class="oven-grid">
-                    <div class="empty">Buscando telemetria dos sensores...</div>
-                </div>
-            </section>
+<div id="splashScreen">
 
-            <!-- SEÇÃO DE COMPONENTE: TELA DETALHADA DO FORNO -->
-            <section id="detailView" class="hidden">
-                <div class="back-btn-box">
-                    <button id="backBtn" class="back-link">← Voltar para a listagem</button>
-                </div>
+    <div class="splash-content">
 
-                <header class="detail-header">
-                    <span class="eyebrow">Diagnóstico do Equipamento</span>
-                    <h1 id="detailName">Forno --</h1>
-                    <div id="detailTemp" class="main-temp">--<span class="unit-detail">°C</span></div>
-                </header>
+        <div class="logo-icon">
+            <i class="fa-solid fa-fire-flame-curved"></i>
+        </div>
 
-                <!-- Informações Detalhadas Básicas -->
-                <div class="parameters">
-                    <div class="parameter">
-                        <span>Canal 01 (Teto)</span>
-                        <strong id="pCanal1">-- °C</strong>
-                    </div>
-                    <div class="parameter">
-                        <span>Canal 02 (Base)</span>
-                        <strong id="pCanal2">-- °C</strong>
-                    </div>
-                    <div class="parameter">
-                        <span>ID do Módulo</span>
-                        <strong id="pModulo">--</strong>
-                    </div>
-                    <div class="parameter">
-                        <span>Último Pacote</span>
-                        <strong id="pHora">--</strong>
-                    </div>
-                </div>
+        <div class="splash-title">
+            Thermo<span>Link</span>
+        </div>
 
-                <!-- Painel de Cálculos e Estatísticas -->
-                <div class="parameters">
-                    <div class="parameter">
-                        <span>Temperatura Mínima</span>
-                        <strong id="calcMin" style="color: #64748b;">--</strong>
-                    </div>
-                    <div class="parameter">
-                        <span>Média do Ciclo</span>
-                        <strong id="calcMed" style="color: #fbbf24;">--</strong>
-                    </div>
-                    <div class="parameter">
-                        <span>Temperatura Máxima</span>
-                        <strong id="calcMax" style="color: #ef4444;">--</strong>
-                    </div>
-                </div>
+        <div class="splash-subtitle">
+            Monitoramento de fornos em tempo real.
+        </div>
 
-                <!-- Painel com Gráfico Principal Cruzado -->
-                <div class="panel">
-                    <div class="panel-title">
-                        <h2>Curva Térmica Analítica</h2>
-                        <span>Tempo Real (Duplo Canal)</span>
-                    </div>
-                    <div class="chart-box">
-                        <canvas id="detailChart"></canvas>
-                    </div>
-                </div>
+        <button id="enterButton" class="enter-button">
+            Entrar
+        </button>
 
-                <!-- Painel de Duração do Processo -->
-                <div class="panel">
-                    <div class="panel-title">
-                        <h2>Tempo de Queima</h2>
-                        <span>Processamento de Ciclo</span>
-                    </div>
-                    <div class="burn-box">
-                        <strong id="burnTime">--</strong>
-                        <p>O intervalo analítico de queima é inferido assim que os limites iniciais e finais forem configurados no ecossistema.</p>
-                    </div>
-                </div>
-
-                <!-- Painel de Histórico Físico Recente -->
-                <div class="panel">
-                    <div class="panel-title">
-                        <h2>Registros Recentes</h2>
-                        <span id="readingCount">0 registros</span>
-                    </div>
-                    <div id="historyList" class="history-list">
-                        <!-- Injetado via Javascript -->
-                    </div>
-                </div>
-            </section>
-
-        </main>
-
-        <!-- BARRA DE NAVEGAÇÃO DE BASE -->
-        <nav class="bottom-nav">
-            <button id="homeNav">
-                <b>⌂</b>
-                <span>Início</span>
-            </button>
-        </nav>
+        <div class="version">
+            Versão 2.0.0
+        </div>
 
     </div>
 
-    <script src="app.js"></script>
+</div>
+
+
+<!-- ========================================================
+     APLICATIVO
+========================================================= -->
+
+<div class="app">
+
+    <header class="top-header">
+
+        <div class="header-left">
+
+            <button id="backButton" class="back-button" style="display:none;">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+
+            <div>
+                <div id="pageTitle" class="page-title">Fornos</div>
+                <div id="pageSubtitle" class="page-subtitle"></div>
+            </div>
+
+        </div>
+
+        <div id="headerOnlinePill" class="header-online-pill">
+            <span></span>
+            <span id="onlineCount">0 online</span>
+        </div>
+
+        <button id="headerAction" class="header-action" style="display:none;">
+            <i class="fa-solid fa-plus"></i>
+        </button>
+
+    </header>
+
+
+    <!-- ====================================================
+         TELA: FORNOS
+    ===================================================== -->
+
+    <main id="screenFornos" class="screen active">
+
+        <div id="ovenGrid" class="oven-grid">
+
+            <div class="loading">
+                <div class="spinner"></div>
+                Carregando fornos...
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- ====================================================
+         TELA: FORNO INDIVIDUAL
+    ===================================================== -->
+
+    <main id="screenForno" class="screen">
+
+        <div class="oven-detail-status">
+            <span id="detailStatusDot" class="status-dot online"></span>
+            <span id="detailStatus">Online</span>
+        </div>
+
+        <div id="detailTemperature" class="detail-temperature">
+            -- <span>°C</span>
+        </div>
+
+        <div class="detail-label">Temperatura atual (canal 1)</div>
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+                <div class="stat-title">
+                    <i class="fa-solid fa-bullseye"></i>
+                    Meta
+                </div>
+                <div id="detailMeta" class="stat-value">--°C</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-title">
+                    <i class="fa-regular fa-clock"></i>
+                    Tempo de queima
+                </div>
+                <div id="detailBurn" class="stat-value">--</div>
+            </div>
+
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="tempo">Tempo real</button>
+            <button class="tab" data-tab="grafico">Gráfico</button>
+            <button class="tab" data-tab="historico">Histórico</button>
+        </div>
+
+        <!-- ABA TEMPO REAL -->
+        <div id="tabTempo" class="tab-content active">
+
+            <div class="chart-card">
+
+                <div style="text-align:center;color:#94a9b7;font-size:12px;margin-bottom:12px;">
+                    Canal 1 &nbsp;•&nbsp; Canal 2
+                </div>
+
+                <div class="gauge-wrap">
+                    <div id="gaugeCircle" class="gauge-circle">
+                        <div>
+                            <div id="gaugeTemperature" class="gauge-temp">--°C</div>
+                            <div class="gauge-label">Canal 1</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="updated-line">
+                    Atualizado há <span id="secondsAgo">--</span> segundos
+                </div>
+
+                <div class="stats-grid" style="margin-bottom:0;">
+
+                    <div class="stat-card">
+                        <div class="stat-title">Canal 1</div>
+                        <div id="pCanal1" class="stat-value">-- °C</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-title">Canal 2</div>
+                        <div id="pCanal2" class="stat-value">-- °C</div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ABA GRÁFICO -->
+        <div id="tabGrafico" class="tab-content">
+
+            <select id="periodSelect" class="form-select" style="margin-bottom:12px;">
+                <option value="50">Últimas 50 leituras</option>
+                <option value="120" selected>Últimas 120 leituras</option>
+                <option value="300">Últimas 300 leituras</option>
+            </select>
+
+            <div class="chart-card">
+                <div class="chart-wrapper">
+                    <canvas id="detailChart"></canvas>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-title">Máxima</div>
+                    <div id="maxTemp" class="stat-value">--</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-title">Mínima</div>
+                    <div id="minTemp" class="stat-value">--</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-title">Média</div>
+                    <div id="avgTemp" class="stat-value">--</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-title">Registros</div>
+                    <div id="totalReadings" class="stat-value">--</div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ABA HISTÓRICO -->
+        <div id="tabHistorico" class="tab-content">
+
+            <div class="page-subtitle" style="margin-bottom:10px;">
+                <span id="readingCount">0 registros</span>
+            </div>
+
+            <div id="historyList"></div>
+
+        </div>
+
+    </main>
+
+
+    <!-- ====================================================
+         TELA: ALERTAS
+    ===================================================== -->
+
+    <main id="screenAlertas" class="screen">
+
+        <div id="alertsContainer" style="margin-top:12px;">
+
+            <div class="alert-card">
+                <div class="alert-icon alert-info">
+                    <i class="fa-solid fa-wifi"></i>
+                </div>
+                <div>
+                    <div class="alert-title">Monitoramento de conexão</div>
+                    <div class="alert-description">
+                        Um forno é considerado offline quando fica mais de
+                        3 minutos sem enviar leituras.
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert-card">
+                <div class="alert-icon alert-warning">
+                    <i class="fa-solid fa-bullseye"></i>
+                </div>
+                <div>
+                    <div class="alert-title">Meta de temperatura</div>
+                    <div class="alert-description">
+                        Defina a meta de cada forno em Configurações para
+                        acompanhar o progresso na tela do forno.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- ====================================================
+         TELA: CONFIGURAÇÕES
+    ===================================================== -->
+
+    <main id="screenConfig" class="screen">
+
+        <div class="settings-section">
+
+            <div class="settings-title">Fornos</div>
+
+            <div class="settings-card">
+
+                <div class="setting-item" id="openOvenConfigModal">
+                    <div class="setting-left">
+                        <div class="setting-icon">
+                            <i class="fa-solid fa-temperature-half"></i>
+                        </div>
+                        <div>
+                            <div class="setting-name">Nome e meta</div>
+                            <div class="setting-description">Personalizar um forno</div>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right setting-arrow"></i>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-left">
+                        <div class="setting-icon">
+                            <i class="fa-solid fa-sliders"></i>
+                        </div>
+                        <div>
+                            <div class="setting-name">Unidade de temperatura</div>
+                            <div class="setting-description">Celsius (°C)</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="settings-section">
+
+            <div class="settings-title">Aplicativo</div>
+
+            <div class="settings-card">
+
+                <div class="setting-item">
+                    <div class="setting-left">
+                        <div class="setting-icon">
+                            <i class="fa-solid fa-circle-info"></i>
+                        </div>
+                        <div>
+                            <div class="setting-name">Sobre o aplicativo</div>
+                            <div class="setting-description">ThermoLink v2.0.0</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- ====================================================
+         MENU INFERIOR
+    ===================================================== -->
+
+    <nav class="bottom-nav">
+
+        <button id="navFornos" class="nav-item active" data-screen="fornos">
+            <i class="fa-solid fa-fire-flame-curved"></i>
+            <span>Fornos</span>
+        </button>
+
+        <button id="navAlertas" class="nav-item" data-screen="alertas">
+            <i class="fa-regular fa-bell"></i>
+            <span>Alertas</span>
+        </button>
+
+        <button id="navConfig" class="nav-item" data-screen="config">
+            <i class="fa-solid fa-gear"></i>
+            <span>Config.</span>
+        </button>
+
+    </nav>
+
+</div>
+
+
+<!-- ========================================================
+     MODAL: CONFIGURAR FORNO
+========================================================= -->
+
+<div id="ovenModal" class="modal">
+
+    <div class="modal-content">
+
+        <div class="modal-title">Configurar forno</div>
+
+        <div class="form-group">
+            <label class="form-label">Forno</label>
+            <select id="ovenSelect" class="form-select"></select>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Nome do forno</label>
+            <input id="ovenNameInput" class="form-input" type="text" placeholder="Ex.: Forno 01">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Meta de temperatura (°C)</label>
+            <input id="ovenTargetInput" class="form-input" type="number" placeholder="Ex.: 1300">
+        </div>
+
+        <button id="saveOvenBtn" class="save-button">Salvar</button>
+
+    </div>
+
+</div>
+
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- GRÁFICOS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js"></script>
+
+<!-- APP -->
+<script src="app.js"></script>
+
 </body>
+
 </html>
